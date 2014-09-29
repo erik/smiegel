@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+<script type="text/javascript" src="https://rawgit.com/leafo/sticky-kit/v1.0.4/jquery.sticky-kit.min.js"></script>
+<script src="/content/smiegel.js"></script>
+{% endblock %}
+
+{% block navbar %}
+<li class="active">
+  <a data-reveal-id="setup-modal" class="radius button" id="connect">
+    Connect phone
+  </a>
+</li>
+<li class="has-dropdown">
+  <a href="#">Settings</a>
+  <ul class="dropdown">
+    <li><a href="#">other settings...</a></li>
+    <li class="active"><a id="logout" href="/_auth/logout">Sign out</a></li>
+  </ul>
+</li>
+{% endblock%}
+
+{% block body %}
+
+<div class="row"><p></p></div>
+
+<div class="row">
+  <dl class="tabs vertical" data-tab>
+      <div>
+        <label>
+          <input type="text" placeholder="Enter name or number" />
+        </label>
+      </div>
+    <dd class="active"><a href="#panel1">Tab 1</a></dd>
+    <dd><a href="#panel2">Tab 2</a></dd>
+    <dd><a href="#panel3">Tab 3</a></dd>
+    <dd><a href="#panel4">Tab 4</a></dd>
+  </dl>
+
+
+  <div class="tabs-content vertical">
+    <div class="content active" id="panel1">
+      <div class="chatwindow">
+        <div class="messagewindow">
+          <div class="message sent">
+            <div class="meta data">
+              <div class="pic"></div>
+              20 minutes ago.
+            </div>
+            <p> I sent this message to you</p>
+          </div>
+
+          <div class = "message received">
+            <div class="metadata" style="float: left;">
+              <div class="pic"></div>
+              5 minutes ago.
+            </div>
+            <div >
+              <p> You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping </p></div>
+
+          </div>
+
+          <div class="message sent">
+            <div class="metadata">
+              <div class="pic"></div>
+              1 second ago
+            </div>
+            <p> I sent this message to you You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping You sent this message to me. its a bit too long to fit on a single page so it might just go ahead and keep wrapping</p>
+          </div>
+
+          <div class = "message received">
+            <div class="metadata">
+              <div class="pic"></div>
+              5 minutes ago.
+            </div>
+            <p > You sent this message to me</p>
+          </div>
+
+          <div class="message sent">
+            <div class="metadata">
+              <div class="pic"></div>
+              1 second ago
+            </div>
+            <p> I sent this message to you</p>
+          </div>
+          <div class = "message received">
+            <div class="metadata">
+              <div class="pic"></div>
+              5 minutes ago.
+            </div>
+            <p > You sent this message to me</p>
+          </div>
+
+          <div class="message sent">
+            <div class="metadata">
+              <div class="pic"></div>
+              1 second ago
+            </div>
+            <p> I sent this message to you</p>
+          </div>
+          <div class = "message received">
+            <div class="metadata">
+              <div class="pic"></div>
+              5 minutes ago.
+            </div>
+            <p > You sent this message to me</p>
+          </div>
+
+          <div class="message sent">
+            <div class="metadata">
+              <div class="pic"></div>
+              1 second ago
+            </div>
+            <p> I sent this message to you</p>
+          </div>
+
+        </div>
+
+        <div class="inputbox large-12 colunmns">
+          <div class="row collapse">
+            <div class="small-10 columns">
+              <label>
+                <input type="text", placeholder="Say something nice" />
+              </label>
+            </div>
+            <div class="small-2 columns">
+              <a href="#" class="button postfix">Send</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reveal Modals begin -->
+<div id="setup-modal" class="reveal-modal" data-reveal>
+  <h2>Setup.</h2>
+  <p>First download the app (blah, blah) from the app store: LINK</p>
+
+  <p>Next, scan this:</p>
+
+  <p><div id="qrcode"></div></p>
+
+  <a class="close-reveal-modal">&#215;</a>
+</div>
+
+<script>Smiegel.init();</script>
+
+{% endblock %}

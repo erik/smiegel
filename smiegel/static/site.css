@@ -1,0 +1,93 @@
+.browserid-login {
+    border: 0;
+    width: 185px;
+    height: 25px;
+    cursor: pointer;
+    background: url(https://developer.mozilla.org/files/3963/persona_sign_in_blue.png);
+    text-indent: -9999px;
+}
+
+.chatwindow {
+    margin-bottom: 0px;
+}
+
+.messagewindow {
+    width: 100%;
+    overflow:auto;
+    overflow-y: scroll;
+}
+
+.inputbox {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.container {
+    overflow: auto;
+}
+
+body {
+    overflow: hidden;
+}
+
+dl .active a:before {
+    content: '» ';
+}
+
+dl .active {
+    font-weight: bold;
+}
+
+.messagewindow .message:nth-of-type(even) {
+    background-color: #f3f3f3 !important;
+}
+
+.messagewindow .message:nth-of-type(odd) {
+    background-color: #c2c2c2 !important;
+}
+
+
+.message {
+    width: auto;
+    min-height: 90px;
+    border-radius: 2px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.message div {
+    padding: 0px;
+    font-size: 11px;
+}
+
+.message.sent {
+    margin-left: 55%;
+    margin-right: 10px;
+
+    text-align: right;
+}
+
+
+.message.received {
+    margin-left:10px;
+    margin-right: 55%;
+}
+
+.message.received .metadata {
+    float: left;
+}
+
+
+.message .metadata {
+    display: inline-block;
+}
+
+.message .metadata .pic {
+    background: green;
+    width: 64px;
+    height: 64px;
+}
+
+.message.sent .metadata {
+    float: right;
+}

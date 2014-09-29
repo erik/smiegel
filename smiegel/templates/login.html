@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <script src="https://login.persona.org/include.js"></script>
+  <script src="/content/jquery.browserid.js"></script>
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block body %}
+  <div class="row">
+       <h1> Log in. </h1>
+  </div>
+
+  <div class="row">
+    <div class="small-6 large-centered columns">
+      <button id="login">Sign in with email</button>
+    </div>
+  </div>
+
+
+  <script>
+    $('#login').browserID({
+        onlogin: function(_) { window.location.href = '/'; },
+        onlogout: function(_) { window.location.href = '/'; },
+        onfail: function(_) $('.warning').show,
+        server: '/_auth/login'
+    });
+  </script>
+{% endblock %}

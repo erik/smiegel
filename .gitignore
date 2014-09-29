@@ -22,3 +22,8 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+*.db
+*.egg-info
+*.pyc
+__pycache__
