@@ -24,6 +24,6 @@ var Smiegel = {
     },
 
     updateQR: function() {
-        $('#qrcode').qrcode('dickbutts');
+        $('#qrcode').qrcode('{"auth_token": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAK", "shared_key": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAK", "host": "192.168.1.5", "port": 5000}');
     },
 };

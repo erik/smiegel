@@ -1,7 +1,6 @@
 import requests
 import flask
-from flask import Flask, render_template, session, request, abort, g, redirect, url_for, flash
-from flask.ext.login import login_user, login_required
+from flask import render_template, session, request, abort, g, flash
 
 from smiegel import get_db, query_db
 
@@ -16,13 +15,19 @@ def is_new_user(email):
     return user is None
 
 
+def setup_new_user(email):
+    pass
+
+
 def get_messages(email, limit=30):
     return query_db('SELECT * FROM messages WHERE email = ? LIMIT ?',
                     [email, limit])
 
+
 def get_chat_names(email):
     return query_db('SELECT DISTINCT(recipient), MAX(timestamp) FROM messages WHERE email = ? ORDER BY 2 desc',
                     [email])
+
 
 @app.before_request
 def get_current_user():
@@ -39,8 +44,6 @@ def load_user(userid):
 
 @app.route('/')
 def index():
-    cur = get_db().cursor()
-
     if not g.user:
         return flask.redirect('/login')
 
@@ -71,7 +74,7 @@ def login_handler():
 
     if verification_data['status'] == 'okay':
         if is_new_user(verification_data['email']):
-            abort(400)
+            setup_new_user(verification_data['email'])
 
         session['email'] = verification_data['email']
         flash('You logged in', 'success')
