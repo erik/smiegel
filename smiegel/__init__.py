@@ -1,28 +1,21 @@
-import sqlite3
-from flask import g, current_app
+import flask
+
+from flask.ext.sqlalchemy import SQLAlchemy
+
+app = flask.Flask(__name__)
+
+app.config.update(
+    DEBUG=True,
+    SECRET_KEY='my development key1',
+    PERSONA_JS='https://login.persona.org/include.js',
+    PERSONA_VERIFIER='https://verifier.login.persona.org/verify',
+    SQLALCHEMY_DATABASE_URI='sqlite:///:memory:'
+)
 
 
-def get_db():
-    db = getattr(g, '_database', None)
+db = SQLAlchemy(app)
 
-    if db is None:
-        db = g._database = sqlite3.connect(':memory:')
+from smiegel import ui, api
 
-        with current_app.open_resource('schema.sql', 'r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
-
-    return db
-
-
-def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
-
-
-def query_db(query, args=(), single=False):
-    cur = get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if single else rv
+app.register_blueprint(api.app, url_prefix='/api')
+app.register_blueprint(ui.app, static_path='/static')

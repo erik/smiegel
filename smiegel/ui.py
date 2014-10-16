@@ -2,40 +2,32 @@ import requests
 import flask
 from flask import render_template, session, request, abort, g, flash
 
-from smiegel import get_db, query_db
+import smiegel.util as util
+from smiegel import db
+
+from smiegel.models.user import User
 
 app = flask.Blueprint('ui', __name__, template_folder='templates/',
                       static_folder='static', static_url_path='/content')
 
 
 def is_new_user(email):
-    user = query_db('SELECT * FROM users WHERE email = ?',
-                    [email], single=True)
-
-    return user is None
+    return User.query.filter_by(login_email=email).first() is None
 
 
-def setup_new_user(email):
-    pass
-
-
-def get_messages(email, limit=30):
-    return query_db('SELECT * FROM messages WHERE email = ? LIMIT ?',
-                    [email, limit])
-
-
-def get_chat_names(email):
-    return query_db('SELECT DISTINCT(recipient), MAX(timestamp) FROM messages WHERE email = ? ORDER BY 2 desc',
-                    [email])
+def create_new_user(email):
+    db.session.add(User(email))
+    db.session.commit()
 
 
 @app.before_request
 def get_current_user():
-    g.user = None
     email = session.get('email')
 
+    g.active = False
+
     if email is not None:
-        g.user = email
+        g.active = True
 
 
 def load_user(userid):
@@ -44,16 +36,15 @@ def load_user(userid):
 
 @app.route('/')
 def index():
-    if not g.user:
+    if not g.active:
         return flask.redirect('/login')
 
-    return render_template('index.html', msgs=get_messages(g.user))
+    return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
-    if g.user is not None:
+    if g.active:
         return flask.redirect('/')
 
     return render_template('login.html')
@@ -74,7 +65,10 @@ def login_handler():
 
     if verification_data['status'] == 'okay':
         if is_new_user(verification_data['email']):
-            setup_new_user(verification_data['email'])
+            create_new_user(verification_data['email'])
+
+        user = User.query.filter_by(login_email=verification_data['email']).first()
+        flash(str(user.id) + ' ' + util.b64_encode(user.auth_token) + ' ' + user.login_email, 'success')
 
         session['email'] = verification_data['email']
         flash('You logged in', 'success')

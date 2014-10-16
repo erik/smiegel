@@ -1,18 +1,16 @@
 from flask import Flask
-from smiegel import ui, api, close_connection
+
+from smiegel import app, db
 
 if __name__ == '__main__':
-    app = Flask(__name__)
-    app.register_blueprint(api.app, url_prefix='/api')
-    app.register_blueprint(ui.app, static_path='/static')
 
     app.config.update(
         DEBUG=True,
         SECRET_KEY='my development key1',
         PERSONA_JS='https://login.persona.org/include.js',
-        PERSONA_VERIFIER='https://verifier.login.persona.org/verify'
+        PERSONA_VERIFIER='https://verifier.login.persona.org/verify',
+        SQLALCHEMY_DATABASE_URI='sqlite:////tmp/tmp.db'
     )
 
-    app.teardown_appcontext(close_connection)
-
+    db.create_all()
     app.run(host='0.0.0.0')

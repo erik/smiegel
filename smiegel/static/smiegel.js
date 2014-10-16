@@ -24,6 +24,6 @@ var Smiegel = {
     },
 
     updateQR: function() {
-        $('#qrcode').qrcode('{"auth_token": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAK", "shared_key": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAK", "host": "192.168.1.5", "port": 5000}');
+        $('#qrcode').qrcode('{"auth_token": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=", "shared_key": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=", "host": "192.168.1.5", "port": 5000}');
     },
 };
