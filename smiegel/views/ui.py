@@ -3,9 +3,9 @@ import flask
 from flask import render_template, session, request, abort, g, flash
 
 import smiegel.util as util
-from smiegel import db
 
-from smiegel.models.user import User
+from smiegel import db
+from smiegel.models import User
 
 app = flask.Blueprint('ui', __name__, template_folder='templates/',
                       static_folder='static', static_url_path='/content')

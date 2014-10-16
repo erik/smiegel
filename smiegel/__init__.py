@@ -15,7 +15,7 @@ app.config.update(
 
 db = SQLAlchemy(app)
 
-from smiegel import ui, api
+from smiegel.views import ui, api
 
 app.register_blueprint(api.app, url_prefix='/api')
 app.register_blueprint(ui.app, static_path='/static')

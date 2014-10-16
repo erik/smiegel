@@ -4,8 +4,8 @@ import json
 from flask import abort, current_app, g, request
 from functools import wraps
 
-from . import util
-from .models.user import User
+from smiegel import util
+from smiegel.models import User
 
 app = flask.Blueprint('api', __name__)
 
