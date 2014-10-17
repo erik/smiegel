@@ -1,19 +1,41 @@
 //
 
 var Smiegel = {
+    config: {},
+
     init: function() {
-        this.updateCredentials();
+        if (!this.readStorage()) {
+            this.updateCredentials();
+        }
+
         this.initJQuery();
+    },
+
+    readStorage: function() {
+        if (!('shared_key' in window.localStorage)) {
+            this.config.shared_key = this.generateSecretKey();
+            window.localStorage.shared_key = this.config.shared_key;
+        }
     },
 
     updateCredentials: function() {
         $.getJSON( "credentials", function(data) {
-            Smiegel.auth_token = data.auth_token;
-            Smiegel.user_id = data.user_id;
-            Smiegel.email = data.email;
+            Smiegel.config = Smiegel.config || {};
+
+            Smiegel.config.auth_token = data.auth_token;
+            Smiegel.config.user_id = data.user_id;
+            Smiegel.config.email = data.email;
+            Smiegel.config.server = data.server;
 
             Smiegel.updateQR();
         });
+    },
+
+    generateSecretKey: function() {
+        var array = new Uint8Array(32);
+        window.crypto.getRandomValues(array);
+
+        return btoa(String.fromCharCode.apply(null, array));;
     },
 
     initJQuery: function() {
@@ -32,14 +54,6 @@ var Smiegel = {
     },
 
     updateQR: function() {
-        var map = {
-            auth_token: this.auth_token,
-            user_id: this.user_id,
-            shared_key: 'MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=',
-            host: '192.168.1.5',
-            port: 5000
-        };
-
-        $('#qrcode').qrcode(JSON.stringify(map));
+        $('#qrcode').qrcode(JSON.stringify(this.config));
     },
 };
