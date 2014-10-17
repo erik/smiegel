@@ -26,7 +26,7 @@ app = flask.Blueprint('api', __name__)
 #
 # ...
 
-REQUIRED_KEYS = ['body', 'signature', 'user-id']
+REQUIRED_KEYS = ['body', 'signature', 'user_id']
 
 
 def authentication_required(func):
@@ -38,6 +38,8 @@ def authentication_required(func):
         if not (json and validate_signature(json)):
             abort(401)
 
+        return func(*args, **kwargs)
+
     return decorator
 
 
@@ -46,8 +48,8 @@ def validate_signature(json):
     if not all([k in json for k in REQUIRED_KEYS]):
         return False
 
-    g.api_user = User.query.get(json['user-id'])
-    if not user:
+    g.api_user = User.query.get(json['user_id'])
+    if not g.api_user:
         return False
 
     return json['signature'] == util.authenticate(g.api_user.auth_token, json['body'])
@@ -66,8 +68,9 @@ def sign_response(message):
 def NOTHING_TO_SEE_HERE_MOVE_ALONG():
     return util.b64_encode(b'0' * 32)
 
+
 @app.route('/message', methods=['POST'])
 @authentication_required
 def message():
-    print(sign_response('hey it worked'))
+    print('hey it worked')
     return sign_response('hey great')

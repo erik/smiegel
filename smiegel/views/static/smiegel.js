@@ -4,24 +4,23 @@ var Smiegel = {
     config: {},
 
     init: function() {
-        if (!this.readStorage()) {
-            this.updateCredentials();
-        }
+        this.readStorage();
+        // TODO: Don't need to do this every time
+        this.updateCredentials();
 
         this.initJQuery();
     },
 
     readStorage: function() {
         if (!('shared_key' in window.localStorage)) {
-            this.config.shared_key = this.generateSecretKey();
-            window.localStorage.shared_key = this.config.shared_key;
+            window.localStorage.shared_key = this.generateSecretKey();
         }
+
+        this.config.shared_key = window.localStorage.shared_key;
     },
 
     updateCredentials: function() {
         $.getJSON( "credentials", function(data) {
-            Smiegel.config = Smiegel.config || {};
-
             Smiegel.config.auth_token = data.auth_token;
             Smiegel.config.user_id = data.user_id;
             Smiegel.config.email = data.email;

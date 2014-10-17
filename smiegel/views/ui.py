@@ -44,11 +44,11 @@ def credentials():
         abort(401)
 
     return flask.jsonify({
-        'user_id': g.user.id,
+        'user_id': str(g.user.id),
         'auth_token': util.b64_encode(g.user.auth_token),
         'email': g.user.login_email,
         # TODO
-        'server': 'http://192.168.1.105:5000/api/'
+        'server': 'http://192.168.1.5:5000/api/'
     })
 
 @app.route('/login', methods=['GET', 'POST'])
