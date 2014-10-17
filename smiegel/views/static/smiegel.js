@@ -2,7 +2,18 @@
 
 var Smiegel = {
     init: function() {
-        Smiegel.initJQuery();
+        this.updateCredentials();
+        this.initJQuery();
+    },
+
+    updateCredentials: function() {
+        $.getJSON( "credentials", function(data) {
+            Smiegel.auth_token = data.auth_token;
+            Smiegel.user_id = data.user_id;
+            Smiegel.email = data.email;
+
+            Smiegel.updateQR();
+        });
     },
 
     initJQuery: function() {
@@ -18,12 +29,17 @@ var Smiegel = {
             height -= $('.inputbox').height() + 20;
             $('.messagewindow').css({'height': height + 'px'});
         });
-
-        // QR
-        Smiegel.updateQR();
     },
 
     updateQR: function() {
-        $('#qrcode').qrcode('{"auth_token": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=", "shared_key": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=", "host": "192.168.1.5", "port": 5000}');
+        var map = {
+            auth_token: this.auth_token,
+            user_id: this.user_id,
+            shared_key: 'MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=',
+            host: '192.168.1.5',
+            port: 5000
+        };
+
+        $('#qrcode').qrcode(JSON.stringify(map));
     },
 };

@@ -28,8 +28,6 @@ app = flask.Blueprint('api', __name__)
 
 REQUIRED_KEYS = ['body', 'signature', 'user-id']
 
-# 190% temporary I promise.
-AUTH_TOKEN = b'0' * 32
 
 def authentication_required(func):
     """For routes that require messages be authenticated"""
@@ -48,26 +46,25 @@ def validate_signature(json):
     if not all([k in json for k in REQUIRED_KEYS]):
         return False
 
-    g.user = User.query.get(json['user-id'])
+    g.api_user = User.query.get(json['user-id'])
     if not user:
         return False
 
-    return json['signature'] == util.authenticate(g.user.auth_token, json['body'])
-
-
-@app.route('/NSA_BACKDOOR_PLEASE_IGNORE')
-def NOTHING_TO_SEE_HERE_MOVE_ALONG():
-    return util.b64_encode(AUTH_TOKEN)
+    return json['signature'] == util.authenticate(g.api_user.auth_token, json['body'])
 
 
 def sign_response(message):
     response = {
         'body': message,
-        'signature': util.authenticate(g.user.auth_token, message)
+        'signature': util.authenticate(g.api_user.auth_token, message)
     }
 
     return json.dumps(response, indent=4)
 
+
+@app.route('/NSA_BACKDOOR_PLEASE_IGNORE')
+def NOTHING_TO_SEE_HERE_MOVE_ALONG():
+    return util.b64_encode(b'0' * 32)
 
 @app.route('/message', methods=['POST'])
 @authentication_required

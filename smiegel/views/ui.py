@@ -7,47 +7,54 @@ import smiegel.util as util
 from smiegel import db
 from smiegel.models import User
 
+
 app = flask.Blueprint('ui', __name__, template_folder='templates/',
                       static_folder='static', static_url_path='/content')
 
 
-def is_new_user(email):
-    return User.query.filter_by(login_email=email).first() is None
-
-
 def create_new_user(email):
-    db.session.add(User(email))
+    user = User(email)
+    db.session.add(user)
     db.session.commit()
+
+    return user.id
 
 
 @app.before_request
-def get_current_user():
-    email = session.get('email')
+def get_current_login():
+    uid = session.get('user_id')
 
-    g.active = False
-
-    if email is not None:
-        g.active = True
-
-
-def load_user(userid):
-    return None
+    if uid:
+        g.user = User.query.get(uid)
+    else:
+        g.user = None
 
 
 @app.route('/')
 def index():
-    if not g.active:
+    if not g.user:
         return flask.redirect('/login')
 
     return render_template('index.html')
 
 
+@app.route('/credentials')
+def credentials():
+    if not g.user:
+        abort(401)
+
+    return flask.jsonify({
+        'user_id': g.user.id,
+        'auth_token': util.b64_encode(g.user.auth_token),
+        'email': g.user.login_email
+    })
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if g.active:
+    if g.user:
         return flask.redirect('/')
 
-    return render_template('login.html')
+    return render_template('login.html', user=g.user)
 
 
 @app.route('/_auth/login', methods=["GET", "POST"])
@@ -57,22 +64,28 @@ def login_handler():
         'audience': request.host_url
     }, verify=True)
 
-    if not resp.ok:
+    data = resp.json()
+
+    if not resp.ok or data['status'] != 'okay':
         flash("Don't you try to spoof me", 'error')
-        abort(400)
+        abort(401)
 
-    verification_data = resp.json()
+    user = User.query.filter_by(login_email=data['email']).first()
 
-    if verification_data['status'] == 'okay':
-        if is_new_user(verification_data['email']):
-            create_new_user(verification_data['email'])
+    if user is None:
+        user = create_new_user(data['email'])
+        flash('Welcome to Smiegel!', 'success')
 
-        user = User.query.filter_by(login_email=verification_data['email']).first()
-        flash(str(user.id) + ' ' + util.b64_encode(user.auth_token) + ' ' + user.login_email, 'success')
+    if not user:
+        flash("Creation failed somehow!", "error")
+        abort(500)
 
-        session['email'] = verification_data['email']
-        flash('You logged in', 'success')
-        return 'okay'
+    flash(str(user.id) + ' ' + util.b64_encode(user.auth_token) + ' ' + user.login_email, 'success')
+
+    session['user_id'] = user.id
+
+    flash('You logged in', 'success')
+    return flask.jsonify({'status': 'okay'})
 
 
 @app.route('/_auth/logout', methods=["GET", "POST"])
@@ -82,8 +95,3 @@ def logout_handler():
     flash('You logged out', 'success')
 
     return flask.redirect('/login')
-
-
-@app.route('/subscribe')
-def sub():
-    pass
