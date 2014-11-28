@@ -2,7 +2,10 @@ from flask import Flask
 
 from smiegel import app, db
 
+
 if __name__ == '__main__':
+    import eventlet
+    from eventlet import wsgi
 
     app.config.update(
         DEBUG=True,
@@ -13,4 +16,4 @@ if __name__ == '__main__':
     )
 
     db.create_all()
-    app.run(host='0.0.0.0')
+    app.run('0.0.0.0', threaded=True)

@@ -1,23 +1,14 @@
 import flask
 import json
 
-from flask import abort, current_app, g, request
+from flask import abort, g, request
 from functools import wraps
 
-from smiegel import util
+from smiegel import util, queue
 from smiegel.models import User
-from smiegel.queue import Queue
+
 
 app = flask.Blueprint('api', __name__)
-message_queues = {}
-
-
-# FIXME: this is a drastically simplified version of what we want.
-def enqueue_message(user, message):
-    if user.id not in message_queues:
-        message_queues[user.id] = Queue(user)
-
-    message_queues[user.id].put(message)
 
 
 # API Definitions
@@ -63,7 +54,8 @@ def validate_signature(json):
     if not g.api_user:
         return False
 
-    return json['signature'] == util.authenticate(g.api_user.auth_token, json['body'])
+    return json['signature'] == util.authenticate(g.api_user.auth_token,
+                                                  json['body'])
 
 
 def sign_response(message):
@@ -81,7 +73,7 @@ def message():
     msgs = json.loads(request.get_json()['body'])
 
     for msg in msgs:
-        enqueue_message(g.api_user, msg)
+        queue.enqueue_message(g.api_user, msg)
 
     print('hey it worked')
     return sign_response('hey great')

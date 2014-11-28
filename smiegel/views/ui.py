@@ -3,6 +3,7 @@ import flask
 from flask import render_template, session, request, abort, g, flash
 
 import smiegel.util as util
+import smiegel.queue as queue
 
 from smiegel import db
 from smiegel.models import User
@@ -48,8 +49,40 @@ def credentials():
         'auth_token': util.b64_encode(g.user.auth_token),
         'email': g.user.login_email,
         # TODO
-        'server': 'http://%s/api/' % app.config['SERVER_NAME']
+        'server': 'http://%s/api/' % flask.current_app.config['SERVER_NAME']
     })
+
+
+@app.route('/lol')
+def lol():
+    import time
+    queue.publisher.publish(g.user.id, str(time.time()))
+
+    return flask.Response('balls')
+
+
+@app.route('/message/stream', methods=['GET'])
+def message_stream():
+    if not g.user:
+        abort(401)
+
+    uid = g.user.id
+
+    def sse_stream():
+        try:
+            import queue as qu
+            q = qu.Queue()
+            queue.publisher.subscribe(uid, q)
+
+            while True:
+                yield util.ServerSentEvent(q.get()).encode()
+
+        except GeneratorExit:
+            queue.publisher.unsubscribe(uid, q)
+
+    return flask.Response(sse_stream(),
+                          mimetype='text/event-stream')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
