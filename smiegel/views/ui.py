@@ -17,7 +17,7 @@ def create_new_user(email):
     db.session.add(user)
     db.session.commit()
 
-    return user.id
+    return user
 
 
 @app.before_request
@@ -48,7 +48,7 @@ def credentials():
         'auth_token': util.b64_encode(g.user.auth_token),
         'email': g.user.login_email,
         # TODO
-        'server': 'http://192.168.1.5:5000/api/'
+        'server': 'http://%s/api/' % app.config['SERVER_NAME']
     })
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -79,7 +79,6 @@ def login_handler():
         flash('Welcome to Smiegel!', 'success')
 
     if not user:
-        flash("Creation failed somehow!", "error")
         abort(500)
 
     flash(str(user.id) + ' ' + util.b64_encode(user.auth_token) + ' ' + user.login_email, 'success')
@@ -96,4 +95,4 @@ def logout_handler():
 
     flash('You logged out', 'success')
 
-    return flask.redirect('/login')
+    return flask.redirect('/')

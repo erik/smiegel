@@ -6,8 +6,19 @@ from functools import wraps
 
 from smiegel import util
 from smiegel.models import User
+from smiegel.queue import Queue
 
 app = flask.Blueprint('api', __name__)
+message_queues = {}
+
+
+# FIXME: this is a drastically simplified version of what we want.
+def enqueue_message(user, message):
+    if user.id not in message_queues:
+        message_queues[user.id] = Queue(user)
+
+    message_queues[user.id].put(message)
+
 
 # API Definitions
 # ---------------
@@ -64,13 +75,13 @@ def sign_response(message):
     return json.dumps(response, indent=4)
 
 
-@app.route('/NSA_BACKDOOR_PLEASE_IGNORE')
-def NOTHING_TO_SEE_HERE_MOVE_ALONG():
-    return util.b64_encode(b'0' * 32)
-
-
 @app.route('/message', methods=['POST'])
 @authentication_required
 def message():
+    msgs = json.loads(request.get_json()['body'])
+
+    for msg in msgs:
+        enqueue_message(g.api_user, msg)
+
     print('hey it worked')
     return sign_response('hey great')

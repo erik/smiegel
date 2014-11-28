@@ -24,7 +24,7 @@
     $('#login').browserID({
         onlogin: function(_) { window.location.href = '/'; },
         onlogout: function(_) { window.location.href = '/'; },
-        onfail: function(_) $('.warning').show,
+        onfail: function(_) { $('.warning').show(); },
         server: '/_auth/login'
     });
   </script>
