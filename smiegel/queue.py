@@ -2,9 +2,6 @@ import collections
 import threading
 
 
-message_queues = {}
-
-
 class CyclicQueue:
     """
     A simple fixed-size queue that blocks on pop.
@@ -26,55 +23,19 @@ class CyclicQueue:
     def pop(self):
         try:
             self.event.clear()
-            return self.queue.pop()
+            return self.queue.popleft()
         except IndexError:
             self.event.wait()
             return self.pop()
 
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if len(self.queue) > 0:
+            return self.pop()
+
+        raise StopIteration
+
     def __len__(self):
         return len(self.queue)
-
-
-class Publisher:
-    """beep boop skiddly bop"""
-
-    def __init__(self):
-        self.topics = {}
-
-    def publish(self, topic, msg):
-        if topic not in self.topics:
-            self.topics[topic] = {
-                'queue': CyclicQueue(),
-                'subs': []
-            }
-
-        topic = self.topics[topic]
-
-        if len(topic['subs']) > 0:
-            for sub in topic['subs']:
-                sub.put(msg)
-        else:
-            topic['queue'].put(msg)
-
-    def subscribe(self, topic, queue):
-        if topic not in self.topics:
-            self.topics[topic] = {
-                'queue': CyclicQueue(),
-                'subs': []
-            }
-
-        topic = self.topics[topic]
-
-        while len(topic['queue']) > 0:
-            queue.put(topic['queue'].pop())
-
-        topic['subs'].append(queue)
-
-    def unsubscribe(self, topic, queue):
-        if topic not in self.topics:
-            return
-
-        self.topics[topic]['subs'].remove(queue)
-
-
-publisher = Publisher()

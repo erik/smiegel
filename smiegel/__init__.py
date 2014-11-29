@@ -1,6 +1,7 @@
 import flask
 
 from flask.ext.sqlalchemy import SQLAlchemy
+from smiegel.publisher import Publisher
 
 app = flask.Flask(__name__)
 
@@ -14,6 +15,8 @@ app.config.update(
 
 
 db = SQLAlchemy(app)
+
+publisher = Publisher()
 
 from smiegel.views import ui, api
 

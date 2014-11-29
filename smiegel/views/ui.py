@@ -3,9 +3,8 @@ import flask
 from flask import render_template, session, request, abort, g, flash
 
 import smiegel.util as util
-import smiegel.queue as queue
 
-from smiegel import db
+from smiegel import db, publisher
 from smiegel.models import User
 
 
@@ -56,7 +55,7 @@ def credentials():
 @app.route('/lol')
 def lol():
     import time
-    queue.publisher.publish(g.user.id, str(time.time()))
+    publisher.publish(g.user.id, str(time.time()))
 
     return flask.Response('balls')
 
@@ -72,13 +71,13 @@ def message_stream():
         try:
             import queue as qu
             q = qu.Queue()
-            queue.publisher.subscribe(uid, q)
+            publisher.subscribe(uid, q)
 
             while True:
                 yield util.ServerSentEvent(q.get()).encode()
 
         except GeneratorExit:
-            queue.publisher.unsubscribe(uid, q)
+            publisher.unsubscribe(uid, q)
 
     return flask.Response(sse_stream(),
                           mimetype='text/event-stream')
