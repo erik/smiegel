@@ -47,7 +47,6 @@ def credentials():
         'user_id': str(g.user.id),
         'auth_token': util.b64_encode(g.user.auth_token),
         'email': g.user.login_email,
-        # TODO
         'server': 'http://%s/api/' % flask.current_app.config['SERVER_NAME']
     })
 
@@ -60,8 +59,8 @@ def lol():
     return flask.Response('balls')
 
 
-@app.route('/message/stream', methods=['GET'])
-def message_stream():
+@app.route('/stream', methods=['GET'])
+def event_stream():
     if not g.user:
         abort(401)
 
