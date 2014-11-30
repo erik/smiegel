@@ -4,14 +4,14 @@ var EventDispatcher = require('../dispatcher/EventDispatcher');
 var EventAction = require('../action/EventAction');
 
 
-var ChatApp = React.createClass({
+var App = React.createClass({
     componentWillMount: function () {
         this.listen();
     },
 
     render: function() {
         return (
-            <div className="chatapp">
+            <div className="app">
             </div>
         );
     },
@@ -29,4 +29,4 @@ var ChatApp = React.createClass({
 });
 
 
-module.exports = ChatApp;
+module.exports = App;
