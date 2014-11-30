@@ -4,7 +4,7 @@ import json
 from flask import abort, g, request
 from functools import wraps
 
-from smiegel import util, queue
+from smiegel import util, publisher
 from smiegel.models import User
 
 
@@ -73,7 +73,8 @@ def message():
     msgs = json.loads(request.get_json()['body'])
 
     for msg in msgs:
-        queue.enqueue_message(g.api_user, msg)
+        event = {'event': 'RECEIVED_MSG', 'data': msg}
+        publisher.publish(g.api_user, event)
 
     print('hey it worked')
     return sign_response('hey great')

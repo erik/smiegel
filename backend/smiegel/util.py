@@ -1,10 +1,7 @@
 import base64
-import flask
 import hmac
-import json
 import os
 
-from flask import abort, request
 from hashlib import sha256
 
 
@@ -48,12 +45,12 @@ def b64_decode(b64):
 
 
 # from http://flask.pocoo.org/snippets/116/
-class ServerSentEvent(object):
-
-    def __init__(self, data):
+class ServerSentEvent:
+    def __init__(self, data, event=None, id=None):
         self.data = data
         self.event = None
         self.id = None
+
         self.desc_map = {
             self.data: "data",
             self.event: "event",
