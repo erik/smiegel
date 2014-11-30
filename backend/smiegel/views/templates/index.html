@@ -4,9 +4,58 @@
     <meta charset="utf-8">
     <title>Smiegel</title>
     <link rel="stylesheet" href="/assets/css/site.css">
+    <link rel="stylesheet" href="/assets/css/flatty.css">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.4.5/css/foundation.min.css">
   </head>
   <body>
-    <section id="react"></section>
+    <div class="row">
+      <div class="container">
+        <div class="content">
+          <section id="react"></section>
+        </div>
+
+        <div class="inputbox large-12 colunmns">
+          <div class="row collapse">
+            <div class="small-10 columns">
+              <label>
+                <input type="text", placeholder="Say something nice" />
+              </label>
+            </div>
+            <div class="small-2 columns">
+              <a href="#" class="button postfix">Send</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.4.5/js/foundation.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.4.5/js/vendor/fastclick.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.4.5/js/vendor/modernizr.js"></script>
+
+    <script>
+     // Make our message window the right size
+     $(window).on("resize", function(){
+         var b = $(".chatwindow");
+         var p = b.position();
+         var height = $(window).height();
+         height -= p.top;
+         height -= $('.inputbox').height() + 20;
+         $('.messagewindow').css({'height': height + 'px'});
+     });
+
+     var b = $(".chatwindow");
+     var p = b.position();
+     var height = $(window).height();
+     height -= p.top;
+     height -= $('.inputbox').height() + 20;
+     $('.messagewindow').css({'height': height + 'px'});
+
+
+    </script>
+
     <script src="/assets/js/bundle.js"></script>
   </body>
 </html>

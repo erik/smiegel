@@ -17,7 +17,7 @@ module.exports = {
 
         EventDispatcher.handleServerAction({
           type: ActionTypes.RECEIVE_MSG,
-          message: msg
+          message: JSON.parse(msg)
         });
 
         break;

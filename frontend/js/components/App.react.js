@@ -2,7 +2,7 @@ var React = require('react');
 
 var EventDispatcher = require('../dispatcher/EventDispatcher');
 var EventAction = require('../action/EventAction');
-
+var ChatMessageList = require('../components/ChatMessageList.react');
 
 var App = React.createClass({
     componentWillMount: function () {
@@ -12,6 +12,7 @@ var App = React.createClass({
     render: function() {
         return (
             <div className="app">
+              <ChatMessageList />
             </div>
         );
     },

@@ -54,10 +54,20 @@ def credentials():
     })
 
 
+gid = 0
+
+
 @app.route('/lol')
 def lol():
     import time
-    event = {'event': 'RECEIVED_MSG', 'data': str(time.time())}
+    global gid
+
+    gid += 1
+    msg = {'author': 'John Doe', 'timestamp': 1000 * time.time(),
+           'id': gid,
+           'text': "did u kno it's " + time.ctime()}
+
+    event = {'event': 'RECEIVED_MSG', 'data': json.dumps(msg)}
     publisher.publish(1, event)
 
     return flask.Response('balls')

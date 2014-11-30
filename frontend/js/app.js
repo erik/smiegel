@@ -1,8 +1,8 @@
-var ChatApp = require('./components/ChatApp.react.js');
+var App = require('./components/App.react.js');
 var React = require('react');
 window.React = React;
 
 React.render(
-    <ChatApp />,
+    <App />,
     document.getElementById('react')
 );
