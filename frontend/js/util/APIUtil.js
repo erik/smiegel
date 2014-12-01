@@ -1,6 +1,8 @@
 var store = require('../vendor/store');
 var humane = require('../vendor/humane');
 
+var ChatAction = require('../action/ChatAction');
+var EventTypes = require('../constants/EventConstants').EventTypes;
 var CryptoUtil = require('../util/CryptoUtil');
 
 
@@ -8,9 +10,9 @@ module.exports = {
   // Change this if you want to use some third party server
   API_HOST: '',
 
-  getEventStream: function(cb) {
+  getEventStream: function() {
     var eventSource = new EventSource(this.API_HOST + "/stream");
-    eventSource.onmessage = cb;
+    eventSource.onmessage = this._receiveEvent;
     eventSource.onerror = function(e) {
       console.log(e);
       humane.log("Failed to reach server!");
@@ -53,5 +55,29 @@ module.exports = {
       data: JSON.stringify(body),
       dataType: "json"
     });
+  },
+
+  _receiveEvent: function(eventData) {
+    var event = JSON.parse(eventData);
+
+    switch (event.event) {
+      case EventTypes.RECEIVED_MSG: {
+        // TODO: decrypt message here
+        var msg = JSON.parse(event.data);
+        // TODO: more message receive-y things
+        msg.sender = msg.sender || 'other';
+
+        ChatAction.receiveMessage(msg)
+        break;
+      }
+
+      // TODO: more event types
+
+      default: {
+        console.log("unknown event!");
+        console.log(event);
+        break;
+      }
+    }
   }
 };

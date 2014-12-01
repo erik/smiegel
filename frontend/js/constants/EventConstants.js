@@ -7,6 +7,10 @@ module.exports = {
     RECEIVE_MSG: null
   }),
 
+  EventTypes: {
+    RECEIVED_MSG: "RECEIVED_MSG"
+  },
+
   PayloadSources: keyMirror({
     SERVER_ACTION: null,
     VIEW_ACTION: null

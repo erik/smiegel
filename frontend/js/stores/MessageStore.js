@@ -1,25 +1,15 @@
-var EventDispatcher = require('../dispatcher/EventDispatcher');
-var EventConstants = require('../constants/EventConstants');
-
-var EventEmitter = require('events').EventEmitter;;
 var store = require('../vendor/store');
-var assign = require('object-assign');
+var Reflux = require('reflux');
 
-var ActionTypes = EventConstants.ActionTypes;
-var CHANGE_EVENT = 'change';
+var ActionTypes = require('../constants/EventConstants').ActionTypes;
+var APIUtil = require('../util/APIUtil');
+var ChatAction = require('../action/ChatAction');
 
 
-var MessageStore = assign({}, EventEmitter.prototype, {
-  emitChange: function() {
-    this.emit(CHANGE_EVENT);
-  },
-
-  addChangeListener: function(callback) {
-    this.on(CHANGE_EVENT, callback);
-  },
-
-  removeChangeListener: function(callback) {
-    this.removeListener(CHANGE_EVENT, callback);
+var MessageStore = Reflux.createStore({
+  init: function() {
+    this.listenTo(ChatAction.receiveMessage, this._receiveMessage);
+    this.listenTo(ChatAction.createMessage, this._createMessage);
   },
 
   addMessage: function(message) {
@@ -29,7 +19,7 @@ var MessageStore = assign({}, EventEmitter.prototype, {
     store.set('messages', msgs);
   },
 
-  getCreatedMessageData: function(message) {
+  formatCreatedMessage: function(message) {
     var timestamp = Date.now();
 
     return {
@@ -43,30 +33,20 @@ var MessageStore = assign({}, EventEmitter.prototype, {
 
   getAll: function() {
     return store.get('messages') || [];
-  }
-});
+  },
 
+  _receiveMessage: function(message) {
+    this.addMessage(message);
+    this.trigger();
+  },
 
-MessageStore.dispatchToken = EventDispatcher.register(function(payload) {
-  var action = payload.action;
+  _createMessage: function(text) {
+    var message = this.formatCreatedMessage(text);
 
-  switch(action.type) {
-    case ActionTypes.RECEIVE_MSG: {
-      MessageStore.addMessage(action.message);
-      MessageStore.emitChange();
-      break;
-    }
+    this.addMessage(message);
 
-    case ActionTypes.CREATE_MESSAGE: {
-      var message = MessageStore.getCreatedMessageData(action.message);
-
-      MessageStore.addMessage(message);
-      MessageStore.emitChange();
-    }
-
-    default: {
-      // do nothing
-    }
+    APIUtil.sendMessage(message);
+    this.trigger();
   }
 });
 

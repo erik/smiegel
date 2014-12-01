@@ -1,7 +1,4 @@
 var React = require('react');
-
-var EventDispatcher = require('../dispatcher/EventDispatcher');
-var EventAction = require('../action/EventAction');
 var ChatAction = require('../action/ChatAction');
 
 

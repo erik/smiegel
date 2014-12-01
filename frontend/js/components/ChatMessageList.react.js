@@ -1,12 +1,13 @@
 var React = require('react');
+var Reflux = require('reflux');
 
-var EventDispatcher = require('../dispatcher/EventDispatcher');
-var EventAction = require('../action/EventAction');
 var ChatMessage = require ('../components/ChatMessage.react');
 var MessageStore = require('../stores/MessageStore');
 
 
 var ChatMessageList = React.createClass({
+    mixins: [Reflux.ListenerMixin],
+
     getInitialState: function() {
         return this._getStateFromStores();
     },
@@ -14,11 +15,10 @@ var ChatMessageList = React.createClass({
     componentDidMount: function() {
         this._updateUI();
 
-        MessageStore.addChangeListener(this._onChange);
+        this.listenTo(MessageStore, this._onChange);
     },
 
     componentWillUnmount: function() {
-        MessageStore.removeChangeListener(this._onChange);
     },
 
     componentDidUpdate: function() {
