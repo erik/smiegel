@@ -1,11 +1,7 @@
-from flask import Flask
-
 from smiegel import app, db
 
 
 if __name__ == '__main__':
-    import eventlet
-    from eventlet import wsgi
 
     app.config.update(
         DEBUG=True,
