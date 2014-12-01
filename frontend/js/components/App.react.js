@@ -4,6 +4,7 @@ var EventDispatcher = require('../dispatcher/EventDispatcher');
 var EventAction = require('../action/EventAction');
 var ChatMessageList = require('../components/ChatMessageList.react');
 var ChatInput = require('../components/ChatInput.react');
+var APIUtil = require('../util/APIUtil.js');
 
 var App = React.createClass({
     componentWillMount: function () {
@@ -24,9 +25,7 @@ var App = React.createClass({
 
         return function() {
             if (eventSource) { eventSource.close(); }
-
-            eventSource = new EventSource("/stream");
-            eventSource.onmessage = EventAction.receiveEvent;
+            eventSource = APIUtil.getEventStream(EventAction.receiveEvent);
         }
     }()
 });

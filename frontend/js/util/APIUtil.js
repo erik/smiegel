@@ -1,9 +1,24 @@
 var store = require('../vendor/store');
+var humane = require('../vendor/humane');
 
 var CryptoUtil = require('../util/CryptoUtil');
 
 
 module.exports = {
+  // Change this if you want to use some third party server
+  API_HOST: '',
+
+  getEventStream: function(cb) {
+    var eventSource = new EventSource(this.API_HOST + "/stream");
+    eventSource.onmessage = cb;
+    eventSource.onerror = function(e) {
+      console.log(e);
+      humane.log("Failed to reach server!");
+    };
+
+    return eventSource;
+  },
+
   sendMessage: function(message) {
     this._postData('/api/message/send', this.formatRequest(1, message));
   },
@@ -34,7 +49,7 @@ module.exports = {
     $.ajax({
       type: "POST",
       contentType: "application/json; charset=utf-8",
-      url: endpoint,
+      url: this.API_HOST + endpoint,
       data: JSON.stringify(body),
       dataType: "json"
     });
