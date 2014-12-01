@@ -2,10 +2,21 @@ var React = require('react');
 
 var EventDispatcher = require('../dispatcher/EventDispatcher');
 var EventAction = require('../action/EventAction');
+var ChatAction = require('../action/ChatAction');
+
 
 var ChatInput = React.createClass({
     _onSubmit: function() {
+        var msg = this.refs.text.getDOMNode().value.trim();
 
+        // Do nothing on blank messages.
+        if (msg === '') {
+            return;
+        }
+
+        ChatAction.createMessage(msg);
+
+        this.refs.text.getDOMNode().value = '';
     },
 
     render: function() {

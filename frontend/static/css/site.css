@@ -43,11 +43,11 @@ body {
     overflow: hidden;
 }
 
-.messagewindow .message:nth-of-type(even) {
+.sender-self {
     background-color: #f3f3f3 !important;
 }
 
-.messagewindow .message:nth-of-type(odd) {
+.sender-other {
     background-color: #dfdfdf !important;
 }
 
@@ -65,8 +65,7 @@ body {
 
 .message-author-name {
     width: auto;
-    display: inline block
-    font-size: 14px;
+    font-size: 12px;
     font-style: italic;
 }
 
@@ -78,5 +77,5 @@ body {
 
 .message .text {
     padding: 0px;
-    font-size: 11px;
+    font-size: smaller;
 }

@@ -7,9 +7,10 @@ var EventAction = require('../action/EventAction');
 var ChatMessage = React.createClass({
     render: function() {
         var message = this.props.message;
+        var senderClass = 'sender-' + message.sender;
 
         return (
-            <div className="message">
+            <div className={"message " + senderClass}>
               <div className="message-author-name">{message.author}
                 <abbr className="timeago" title={new Date(message.timestamp).toISOString()}>
                 </abbr>

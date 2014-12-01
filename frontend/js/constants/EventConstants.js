@@ -3,6 +3,7 @@ var keyMirror = require('keymirror');
 module.exports = {
   ActionTypes: keyMirror({
     SEND_MESSAGE: null,
+    CREATE_MESSAGE: null,
     RECEIVE_MSG: null
   }),
 

@@ -29,8 +29,16 @@ var MessageStore = assign({}, EventEmitter.prototype, {
     store.set('messages', msgs);
   },
 
-  get: function(id) {
-    // TODO: this
+  getCreatedMessageData: function(message) {
+    var timestamp = Date.now();
+
+    return {
+      id: 'm_' + timestamp,
+      author: 'me',
+      sender: 'self',
+      timestamp: new Date(timestamp),
+      text: message
+    }
   },
 
   getAll: function() {
@@ -47,6 +55,13 @@ MessageStore.dispatchToken = EventDispatcher.register(function(payload) {
       MessageStore.addMessage(action.message);
       MessageStore.emitChange();
       break;
+    }
+
+    case ActionTypes.CREATE_MESSAGE: {
+      var message = MessageStore.getCreatedMessageData(action.message);
+
+      MessageStore.addMessage(message);
+      MessageStore.emitChange();
     }
 
     default: {

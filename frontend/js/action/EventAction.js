@@ -12,12 +12,14 @@ module.exports = {
       case "RECEIVED_MSG": {
         // TODO: decrypt message here
 
-        var msg = json.data;
+        var msg = JSON.parse(json.data);
+        msg.sender = 'other';
+
         console.log('received ' + msg);
 
         EventDispatcher.handleServerAction({
           type: ActionTypes.RECEIVE_MSG,
-          message: JSON.parse(msg)
+          message: msg
         });
 
         break;
