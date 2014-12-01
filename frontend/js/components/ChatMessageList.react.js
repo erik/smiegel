@@ -12,7 +12,7 @@ var ChatMessageList = React.createClass({
     },
 
     componentDidMount: function() {
-        this._scrollToBottom();
+        this._updateUI();
 
         MessageStore.addChangeListener(this._onChange);
     },
@@ -22,7 +22,7 @@ var ChatMessageList = React.createClass({
     },
 
     componentDidUpdate: function() {
-        this._scrollToBottom();
+        this._updateUI();
     },
 
     render: function() {
@@ -45,6 +45,14 @@ var ChatMessageList = React.createClass({
 
     _onChange: function() {
         this.setState(this._getStateFromStores());
+    },
+
+    _updateUI: function() {
+        // TODO: import jquery like a sane person
+        $("abbr.timeago").timeago();
+
+
+        this._scrollToBottom();
     },
 
     _scrollToBottom: function() {

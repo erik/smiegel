@@ -46,6 +46,9 @@ dl .active {
     background-color: #c2c2c2 !important;
 }
 
+* {
+    font-family: Ubuntu, Helvetica, Arial, sans-serif;
+}
 
 .message {
     width: auto;

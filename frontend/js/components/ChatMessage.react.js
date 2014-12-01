@@ -10,12 +10,11 @@ var ChatMessage = React.createClass({
 
         return (
             <div className="message">
-              <b className="message-author-name">{message.author}</b>
-              <div className="message-time">
-                {new Date(message.timestamp).toLocaleTimeString()}
-              </div>
+              <h5 className="message-author-name">{message.author}</h5>
+              <abbr className="timeago" title={new Date(message.timestamp).toISOString()}>
+              </abbr>
 
-              <div className="message-text">{message.text}</div>
+              <div className="text">{message.text}</div>
             </div>
         );
     }
