@@ -20,6 +20,19 @@
 .inputbox {
     margin-top: 10px;
     margin-bottom: 0px;
+    display: inline-block;
+    width: 100%;
+}
+
+.inputbox .text-field {
+    width: 80%;
+    display: inline-block;
+}
+
+.inputbox .button {
+    width: 18%;
+    display: inline-block;
+    float: right;
 }
 
 .container {
@@ -30,20 +43,12 @@ body {
     overflow: hidden;
 }
 
-dl .active a:before {
-    content: '» ';
-}
-
-dl .active {
-    font-weight: bold;
-}
-
 .messagewindow .message:nth-of-type(even) {
     background-color: #f3f3f3 !important;
 }
 
 .messagewindow .message:nth-of-type(odd) {
-    background-color: #c2c2c2 !important;
+    background-color: #dfdfdf !important;
 }
 
 * {
@@ -52,45 +57,26 @@ dl .active {
 
 .message {
     width: auto;
-    min-height: 90px;
+    min-height: 50px;
     border-radius: 2px;
     padding: 5px;
     margin-bottom: 10px;
 }
 
-.message div {
+.message-author-name {
+    width: auto;
+    display: inline block
+    font-size: 14px;
+    font-style: italic;
+}
+
+.timeago {
+    font-size: 10px;
+    font-color: #ccc;
+    float: right;
+}
+
+.message .text {
     padding: 0px;
     font-size: 11px;
-}
-
-.message.sent {
-    margin-left: 55%;
-    margin-right: 10px;
-
-    text-align: right;
-}
-
-
-.message.received {
-    margin-left:10px;
-    margin-right: 55%;
-}
-
-.message.received .metadata {
-    float: left;
-}
-
-
-.message .metadata {
-    display: inline-block;
-}
-
-.message .metadata .pic {
-    background: green;
-    width: 64px;
-    height: 64px;
-}
-
-.message.sent .metadata {
-    float: right;
 }

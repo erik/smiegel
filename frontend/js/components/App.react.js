@@ -3,6 +3,7 @@ var React = require('react');
 var EventDispatcher = require('../dispatcher/EventDispatcher');
 var EventAction = require('../action/EventAction');
 var ChatMessageList = require('../components/ChatMessageList.react');
+var ChatInput = require('../components/ChatInput.react');
 
 var App = React.createClass({
     componentWillMount: function () {
@@ -13,6 +14,7 @@ var App = React.createClass({
         return (
             <div className="app">
               <ChatMessageList />
+              <ChatInput />
             </div>
         );
     },
