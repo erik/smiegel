@@ -15,6 +15,15 @@ module.exports = {
     return array;
   },
 
+  sign: function(message) {
+    return 'TODO: implement sign';
+  },
+
+  encrypt: function(message) {
+    // TODO: implement encryption
+    return JSON.stringify(message);
+  },
+
   _encrypt: function(key, msgBytes) {
     var cipher = forge.cipher.createCipher('AES-GCM', key);
     var iv = this.genRandomBytes(16);

@@ -23,8 +23,11 @@ app = flask.Blueprint('api', __name__)
 #  }`
 #
 #
-# POST /message
+# POST /message/receive
 #    [{"sender": string, "body": string, "timestamp": int}, ...]
+#
+# POST /message/send
+#    {"recipient": string, "body": string, "timestamp": int}
 #
 # ...
 
@@ -54,6 +57,8 @@ def validate_signature(json):
     if not g.api_user:
         return False
 
+    # just ignore all crypto for now
+    return True
     return json['signature'] == util.authenticate(g.api_user.auth_token,
                                                   json['body'])
 
@@ -67,9 +72,9 @@ def sign_response(message):
     return json.dumps(response, indent=4)
 
 
-@app.route('/message', methods=['POST'])
+@app.route('/message/receive', methods=['POST'])
 @authentication_required
-def message():
+def recv_message():
     msgs = json.loads(request.get_json()['body'])
 
     for msg in msgs:
@@ -78,3 +83,14 @@ def message():
 
     print('hey it worked')
     return sign_response('hey great')
+
+
+@app.route('/message/send', methods=['POST'])
+@authentication_required
+def send_message():
+    msg = request.get_json()['body']
+
+    # TODO: route to phone
+
+    print('>> sending message: ' + msg)
+    return sign_response('neat')
