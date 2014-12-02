@@ -4,8 +4,8 @@ import json
 from flask import abort, g, request
 from functools import wraps
 
-from smiegel import util, publisher
-from smiegel.models import User
+from smiegel import db, util, publisher
+from smiegel.models import User, Message
 
 
 app = flask.Blueprint('api', __name__)
@@ -24,7 +24,7 @@ app = flask.Blueprint('api', __name__)
 #
 #
 # POST /message/receive
-#    [{"sender": string, "body": string, "timestamp": int}, ...]
+#    {"sender": string, "body": string, "timestamp": int}
 #
 # POST /message/send
 #    {"recipient": string, "body": string, "timestamp": int}
@@ -88,9 +88,14 @@ def recv_message():
 @app.route('/message/send', methods=['POST'])
 @authentication_required
 def send_message():
-    msg = request.get_json()['body']
+    req_msg = request.get_json()['body']
+    print('>> sending message: ' + req_msg)
 
+    msg = Message(g.api_user.id, req_msg, acked=False)
+    db.session.add(msg)
+    db.session.commit()
+
+    # TODO: attach use message id for ACK
     # TODO: route to phone
 
-    print('>> sending message: ' + msg)
     return sign_response('neat')
