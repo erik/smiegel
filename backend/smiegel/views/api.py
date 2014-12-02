@@ -29,6 +29,9 @@ app = flask.Blueprint('api', __name__)
 # POST /message/send
 #    {"recipient": string, "body": string, "timestamp": int}
 #
+# POST /message/ack
+#    {"id": int}
+#
 # ...
 
 REQUIRED_KEYS = ['body', 'signature', 'user_id']
@@ -99,3 +102,19 @@ def send_message():
     # TODO: route to phone
 
     return sign_response('neat')
+
+
+@app.route('/message/ack', methods=['POST'])
+@authentication_required
+def ack_message():
+    json = request.get_json()['body']
+    msg = Message.query.get(json['id'])
+    if msg is None:
+        abort(404)
+
+    msg.acked = True
+    db.session.commit()
+
+    # TODO: fire off ACK event
+
+    return sign_response('cool dude')
