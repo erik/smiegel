@@ -12,8 +12,13 @@ var App = React.createClass({
     render: function() {
         return (
             <div className="app">
-              <ChatMessageList />
-              <ChatInput />
+              <div className="col-sm-3">
+                  Chat list will go here.
+              </div>
+              <div className="col-sm-8">
+                <ChatMessageList />
+                <ChatInput />
+              </div>
             </div>
         );
     },

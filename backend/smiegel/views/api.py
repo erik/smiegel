@@ -111,6 +111,7 @@ def send_message():
 def ack_message():
     json = request.get_json()['body']
     msg = Message.query.get(json['id'])
+
     if msg is None:
         abort(404)
 
