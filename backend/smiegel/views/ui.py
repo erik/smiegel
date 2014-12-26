@@ -57,8 +57,8 @@ def credentials():
 gid = 0
 
 
-@app.route('/lol')
-def lol():
+@app.route('/backdoor/recv')
+def backdoor_recv():
     import time
     global gid
 
@@ -73,8 +73,8 @@ def lol():
     return flask.Response('okay, sent\n')
 
 
-@app.route('/lol/<msgId>')
-def lol_foo(msgId):
+@app.route('/backdoor/ack/<msgId>')
+def backdoor_ack(msgId):
     event = util.Event('ACKED_MSG', '{"id": "%s"}' % msgId)
     publisher.publish(1, event)
 
