@@ -6,19 +6,16 @@ var ChatMessage = React.createClass({
     var senderCls = 'sender-' + message.sender;
     var ackedCls = message.acked ? 'acked' : 'unacked';
 
-    console.log(message);
-
     return (
       <div className={['message', ackedCls, senderCls].join(' ')}>
         <div className="message-author-name">{message.author}
           <abbr className="timeago" title={new Date(message.timestamp).toISOString()}>
           </abbr>
+        </div>
 
-        </div>
-        <div className="text">
-          { message.acked ? '' : <div className="throbber">Pending...</div> }
-          { message.text }
-        </div>
+        { message.acked ?  '' : <div className="loader">...</div> }
+
+        <div className="text"> { message.text } </div>
       </div>
     );
   }
