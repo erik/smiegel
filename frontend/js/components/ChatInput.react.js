@@ -26,10 +26,6 @@ var ChatInput = React.createClass({
                          ref="text"
                          className="text-field"
                          placeholder="Say something" />
-                  <input onClick={this._onSubmit}
-                         type="button"
-                         className="button postfix"
-                         value="Submit" />
                 </form>
           </div>
         );

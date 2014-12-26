@@ -24,17 +24,6 @@
     width: 100%;
 }
 
-.inputbox .text-field {
-    width: 80%;
-    display: inline-block;
-}
-
-.inputbox .button {
-    width: 18%;
-    display: inline-block;
-    float: right;
-}
-
 .container {
     overflow: auto;
 }
