@@ -43,9 +43,14 @@ body {
     overflow: hidden;
 }
 
-.sender-self {
+.sender-self.acked {
     background-color: #f3f3f3 !important;
 }
+
+.sender-self.unacked {
+    background-color: #ff0000 !important;
+}
+
 
 .sender-other {
     background-color: #dfdfdf !important;

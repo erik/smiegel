@@ -51,7 +51,6 @@ var ChatMessageList = React.createClass({
         // TODO: import jquery like a sane person
         $("abbr.timeago").timeago();
 
-
         this._scrollToBottom();
     },
 

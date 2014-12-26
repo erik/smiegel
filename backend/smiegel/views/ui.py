@@ -67,10 +67,18 @@ def lol():
            'id': gid,
            'text': "did u kno it's " + time.ctime()}
 
-    event = {'event': 'RECEIVED_MSG', 'data': json.dumps(msg)}
+    event = util.Event('RECEIVED_MSG', json.dumps(msg))
     publisher.publish(1, event)
 
-    return flask.Response('balls')
+    return flask.Response('okay, sent\n')
+
+
+@app.route('/lol/<msgId>')
+def lol_foo(msgId):
+    event = util.Event('ACKED_MSG', '{"id": "%s"}' % msgId)
+    publisher.publish(1, event)
+
+    return flask.Response("okay, ACK'd\n")
 
 
 @app.route('/stream', methods=['GET'])
@@ -86,8 +94,7 @@ def event_stream():
             publisher.subscribe(uid, q)
 
             while True:
-                event = q.get()
-                yield util.ServerSentEvent(json.dumps(event)).encode()
+                yield q.get().encodeSse()
 
         except GeneratorExit:
             publisher.unsubscribe(uid, q)

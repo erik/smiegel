@@ -12,7 +12,10 @@ module.exports = {
 
   getEventStream: function() {
     var eventSource = new EventSource(this.API_HOST + "/stream");
-    eventSource.onmessage = this._receiveEvent;
+
+    eventSource.addEventListener(EventTypes.RECEIVED_MSG, this._eventRecvMsg);
+    eventSource.addEventListener(EventTypes.ACKED_MSG, this._eventAcked);
+
     eventSource.onerror = function(e) {
       console.log(e);
       humane.log("Failed to reach server!");
@@ -22,7 +25,14 @@ module.exports = {
   },
 
   sendMessage: function(message) {
-    this._postData('/api/message/send', this.formatRequest(1, message));
+    this._postData(
+      '/api/message/send',
+      this.formatRequest(1, message),
+      function(response) {
+        var js = JSON.parse(response);
+        ChatAction.updateMessageId(message.id, js.id);
+      }
+    );
   },
 
   formatRequest: function(user_id, body) {
@@ -30,9 +40,9 @@ module.exports = {
     var encrypted = CryptoUtil.encrypt(body);
 
     var msg = {
-        'user_id': this._getCredentials().user_id,
-        'body': encrypted,
-        'signature': signature
+      'user_id': this._getCredentials().user_id,
+      'body': encrypted,
+      'signature': signature
     };
 
     return msg;
@@ -47,37 +57,33 @@ module.exports = {
     }
   },
 
-  _postData: function(endpoint, body) {
+  _postData: function(endpoint, body, cb) {
     $.ajax({
       type: "POST",
       contentType: "application/json; charset=utf-8",
       url: this.API_HOST + endpoint,
       data: JSON.stringify(body),
-      dataType: "json"
+      dataType: "json",
+    }).done(function(data) {
+      if (cb) {
+        cb(data.body);
+      }
     });
   },
 
-  _receiveEvent: function(eventData) {
-    var event = JSON.parse(eventData);
+  _eventAcked: function(eventData) {
+    // TODO: decrypt message here
+    var msg = JSON.parse(eventData.data);
 
-    switch (event.event) {
-      case EventTypes.RECEIVED_MSG: {
-        // TODO: decrypt message here
-        var msg = JSON.parse(event.data);
-        // TODO: more message receive-y things
-        msg.sender = msg.sender || 'other';
+    ChatAction.ackMessage(msg.id);
+  },
 
-        ChatAction.receiveMessage(msg)
-        break;
-      }
+  _eventRecvMsg: function(eventData) {
+    // TODO: decrypt message here
+    var msg = JSON.parse(eventData.data);
+    // TODO: more message receive-y things
+    msg.sender = msg.sender || 'other';
 
-      // TODO: more event types
-
-      default: {
-        console.log("unknown event!");
-        console.log(event);
-        break;
-      }
-    }
+    ChatAction.receiveMessage(msg);
   }
 };

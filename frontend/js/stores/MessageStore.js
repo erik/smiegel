@@ -8,8 +8,10 @@ var ChatAction = require('../action/ChatAction');
 
 var MessageStore = Reflux.createStore({
   init: function() {
+    this.listenTo(ChatAction.ackMessage, this._ackMessage);
     this.listenTo(ChatAction.receiveMessage, this._receiveMessage);
     this.listenTo(ChatAction.createMessage, this._createMessage);
+    this.listenTo(ChatAction.updateMessageId, this._updateMessageId);
   },
 
   addMessage: function(message) {
@@ -23,10 +25,11 @@ var MessageStore = Reflux.createStore({
     var timestamp = Date.now();
 
     return {
-      id: 'm_' + timestamp,
+      id: 'tmp_' + timestamp,
       author: 'me',
       sender: 'self',
       timestamp: new Date(timestamp),
+      acked: false,
       text: message
     }
   },
@@ -35,8 +38,18 @@ var MessageStore = Reflux.createStore({
     return store.get('messages') || [];
   },
 
-  _receiveMessage: function(message) {
-    this.addMessage(message);
+  _ackMessage: function(id) {
+    var msgs = store.get('messages') || [];
+
+    msgs = msgs.map(function(msg) {
+      if (msg.id == id) {
+        msg.acked = true;
+      }
+
+      return msg;
+    });
+
+    store.set('messages', msgs);
     this.trigger();
   },
 
@@ -46,6 +59,26 @@ var MessageStore = Reflux.createStore({
     this.addMessage(message);
 
     APIUtil.sendMessage(message);
+    this.trigger();
+  },
+
+  _receiveMessage: function(message) {
+    this.addMessage(message);
+    this.trigger();
+  },
+
+  _updateMessageId: function(oldId, newId) {
+    var msgs = store.get('messages') || [];
+
+    msgs = msgs.map(function(msg) {
+      if (msg['id'] == oldId) {
+        msg['id'] = newId;
+      }
+
+      return msg;
+    });
+
+    store.set('messages', msgs);
     this.trigger();
   }
 });

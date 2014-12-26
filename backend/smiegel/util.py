@@ -45,22 +45,21 @@ def b64_decode(b64):
 
 
 # from http://flask.pocoo.org/snippets/116/
-class ServerSentEvent:
-    def __init__(self, data, event=None, id=None):
+class Event:
+
+    def __init__(self, event, data):
+        self.event = event
         self.data = data
-        self.event = None
-        self.id = None
 
-        self.desc_map = {
-            self.data: "data",
-            self.event: "event",
-            self.id: "id"
-        }
-
-    def encode(self):
+    def encodeSse(self):
         if not self.data:
             return ""
-        lines = ["%s: %s" % (v, k)
-                 for k, v in self.desc_map.items() if k]
+
+        event = [
+            ("event", self.event),
+            ("data", self.data)
+        ]
+
+        lines = ["%s: %s" % (k, v) for k, v in event if v]
 
         return "%s\n\n" % "\n".join(lines)

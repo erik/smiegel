@@ -81,7 +81,7 @@ def recv_message():
     msgs = json.loads(request.get_json()['body'])
 
     for msg in msgs:
-        event = {'event': 'RECEIVED_MSG', 'data': msg}
+        event = util.Event('RECEIVED_MSG', msg)
         publisher.publish(g.api_user, event)
 
     print('hey it worked')
@@ -98,10 +98,12 @@ def send_message():
     db.session.add(msg)
     db.session.commit()
 
-    # TODO: attach use message id for ACK
+    print(msg.id)
+
     # TODO: route to phone
 
-    return sign_response('neat')
+    resp = {'id': str(msg.id)}
+    return sign_response(json.dumps(resp))
 
 
 @app.route('/message/ack', methods=['POST'])
@@ -115,6 +117,6 @@ def ack_message():
     msg.acked = True
     db.session.commit()
 
-    # TODO: fire off ACK event
+    publisher.publish(g.api_user, util.Event('ACKED_MSG', msg.id))
 
     return sign_response('cool dude')
