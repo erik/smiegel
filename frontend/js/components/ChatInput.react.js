@@ -16,7 +16,7 @@ var ChatInput = React.createClass({
   },
 
   _haveActiveChat: function() {
-    return ChatStore.getCurrentId() != null;
+    return ChatStore.getCurrentId() !== null;
   },
 
   _onChange: function() {

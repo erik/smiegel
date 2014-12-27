@@ -31,7 +31,7 @@ var MessageStore = Reflux.createStore({
       acked: false,
       thread: ChatStore.getCurrentId(),
       text: message
-    }
+    };
   },
 
   getAll: function() {
@@ -74,8 +74,8 @@ var MessageStore = Reflux.createStore({
     var msgs = store.get('messages') || [];
 
     msgs = msgs.map(function(msg) {
-      if (msg['id'] == oldId) {
-        msg['id'] = newId;
+      if (msg.id == oldId) {
+        msg.id = newId;
       }
 
       return msg;

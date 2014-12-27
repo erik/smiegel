@@ -35,7 +35,7 @@ var ChatList = React.createClass({
   mixins: [Reflux.ListenerMixin],
 
   getInitialState: function() {
-    return this._getStateFromStores();;
+    return this._getStateFromStores();
   },
 
   componentDidMount: function() {

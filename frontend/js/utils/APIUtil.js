@@ -54,7 +54,7 @@ module.exports = {
       user_id: 1,
       shared_key: null,
       secret_key: null
-    }
+    };
   },
 
   _postData: function(endpoint, body, cb) {

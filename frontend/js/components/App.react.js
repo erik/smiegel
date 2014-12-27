@@ -58,7 +58,7 @@ var App = React.createClass({
         return function() {
             if (eventSource) { eventSource.close(); }
             eventSource = APIUtil.getEventStream();
-        }
+        };
     }()
 });
 
