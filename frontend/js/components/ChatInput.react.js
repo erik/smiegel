@@ -1,7 +1,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 
-var ChatAction = require('../action/ChatAction');
+var ChatAction = require('../actions/ChatAction');
 var ChatStore = require('../stores/ChatStore');
 
 var ChatInput = React.createClass({

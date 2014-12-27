@@ -2,7 +2,7 @@ var store = require('../vendor/store');
 var Reflux = require('reflux');
 
 var APIUtil = require('../util/APIUtil');
-var ChatAction = require('../action/ChatAction');
+var ChatAction = require('../actions/ChatAction');
 var MessageStore = require('../stores/MessageStore');
 
 var _currentId = null;

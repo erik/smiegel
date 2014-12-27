@@ -1,7 +1,7 @@
 var store = require('../vendor/store');
 var humane = require('../vendor/humane');
 
-var ChatAction = require('../action/ChatAction');
+var ChatAction = require('../actions/ChatAction');
 var EventTypes = require('../constants/EventConstants').EventTypes;
 var CryptoUtil = require('../util/CryptoUtil');
 
