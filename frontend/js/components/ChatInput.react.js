@@ -40,7 +40,7 @@ var ChatInput = React.createClass({
     if (!this.state.active) {
       return (
         <div className="inputbox">
-        <form onSubmit="void">
+        <form>
           <input disabled
                  type="text"
                  className="text-field form-control"

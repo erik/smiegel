@@ -30,6 +30,7 @@ var ChatStore = Reflux.createStore({
 
     var threads = store.get('threads');
     threads[_currentId].unread = 0;
+
     store.set('threads', threads);
 
     this.trigger();

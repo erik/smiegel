@@ -16,11 +16,16 @@ var ChatItem = React.createClass({
       cls += " active";
     }
 
+    var unread = '';
+    if (chat.unread > 0) {
+      unread = <span className="badge"> { chat.unread } </span>;
+    }
+
     return (
       <a onClick={this.onClick}
          className={ cls }>
         { chat.name }
-        <span className="badge"> { chat.unread } </span>
+        { unread }
       </a>
     );
   }
