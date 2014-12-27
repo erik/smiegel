@@ -1,35 +1,69 @@
 var React = require('react');
-var ChatAction = require('../action/ChatAction');
+var Reflux = require('reflux');
 
+var ChatAction = require('../action/ChatAction');
+var ChatStore = require('../stores/ChatStore');
 
 var ChatInput = React.createClass({
-    _onSubmit: function(e) {
-      e.preventDefault();
+  mixins: [Reflux.ListenerMixin],
 
-      var msg = this.refs.text.getDOMNode().value.trim();
+  getInitialState: function() {
+    return { active: this._haveActiveChat() };
+  },
 
-      // Do nothing on blank messages.
-      if (msg === '') {
-        return;
-      }
+  componentDidMount: function() {
+    this.listenTo(ChatStore, this._onChange);
+  },
 
-      ChatAction.createMessage(msg);
+  _haveActiveChat: function() {
+    return ChatStore.getCurrentId() != null;
+  },
 
-      this.refs.text.getDOMNode().value = '';
-    },
+  _onChange: function() {
+    this.setState({ active: this._haveActiveChat() });
+  },
 
-    render: function() {
+  _onSubmit: function(e) {
+    e.preventDefault();
+    var msg = this.refs.text.getDOMNode().value.trim();
+
+    // Do nothing on blank messages.
+    if (msg === '') {
+      return;
+    }
+
+   ChatAction.createMessage(msg);
+   this.refs.text.getDOMNode().value = '';
+  },
+
+  render: function() {
+    if (!this.state.active) {
       return (
         <div className="inputbox">
-                <form onSubmit={this._onSubmit}>
-                  <input type="text"
-                         ref="text"
-                         className="text-field"
-                         placeholder="Say something" />
-                </form>
-          </div>
-        );
+        <form onSubmit="void">
+          <input disabled
+                 type="text"
+                 className="text-field form-control"
+                 aria-describedby="basic-addon2"
+                 placeholder="Choose or create a chat" />
+          </form>
+        </div>
+      );
     }
+
+    return (
+      <div className="inputbox">
+        <form onSubmit={this._onSubmit}>
+          <input autofocus
+                 type="text"
+                 ref="text"
+                 className="text-field form-control"
+                 aria-describedby="basic-addon2"
+                 placeholder="Say something" />
+        </form>
+      </div>
+    );
+  }
 });
 
 

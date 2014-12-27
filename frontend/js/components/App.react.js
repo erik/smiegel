@@ -2,6 +2,8 @@ var React = require('react');
 
 var ChatMessageList = require('../components/ChatMessageList.react');
 var ChatInput = require('../components/ChatInput.react');
+var ChatList = require('../components/ChatList.react');
+
 var APIUtil = require('../util/APIUtil.js');
 
 var App = React.createClass({
@@ -12,10 +14,10 @@ var App = React.createClass({
     render: function() {
         return (
             <div className="app">
-              <div className="col-sm-3">
-                  Chat list will go here.
+              <div className="col-sm-3" id="chat-list">
+                  <ChatList />
               </div>
-              <div className="col-sm-8">
+              <div className="col-sm-9">
                 <ChatMessageList />
                 <ChatInput />
               </div>

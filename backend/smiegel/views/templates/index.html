@@ -2,12 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Smiegel</title>
 
     <link rel="stylesheet" href="/assets/css/site.css">
     <link rel="stylesheet" href="/assets/css/flatty.css">
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.1/paper/bootstrap.min.css">
   </head>
   <body>
     <div class="container">
@@ -22,23 +25,19 @@
 
     <script>
      // Make our message window the right size
-     $(window).on("resize", function(){
+     function resizeUI() {
          var b = $(".chatwindow");
          var p = b.position();
          var height = $(window).height();
          height -= p.top;
-         height -= $('.inputbox').height() + 20;
-         $('.messagewindow').css({'height': height + 'px'});
-     });
 
-     $(document).ready(function() {
-         var b = $(".chatwindow");
-         var p = b.position();
-         var height = $(window).height();
-         height -= p.top;
          height -= $('.inputbox').height() + 20;
+         $('.chat-list').css({'height': height + 'px'});
          $('.messagewindow').css({'height': height + 'px'});
-     });
+     }
+
+     $(window).on("resize", resizeUI);
+     $(document).ready(resizeUI);
     </script>
 
     <script src="/assets/js/bundle.js"></script>

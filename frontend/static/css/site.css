@@ -20,8 +20,15 @@
 .inputbox {
     margin-top: 10px;
     margin-bottom: 0px;
-    display: inline-block;
     width: 100%;
+}
+
+.inputbox input {
+  width: 100%;
+}
+
+#chat-list {
+  overflow-y: scroll;
 }
 
 .container {
@@ -92,7 +99,7 @@ body {
 }
 .loader {
   margin: 2em auto;
-  font-size: 3px;
+  font-size: 4px;
   position: relative;
   text-indent: -9999em;
   -webkit-animation-delay: 0.16s;

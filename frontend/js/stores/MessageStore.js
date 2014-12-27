@@ -5,11 +5,9 @@ var ActionTypes = require('../constants/EventConstants').ActionTypes;
 var APIUtil = require('../util/APIUtil');
 var ChatAction = require('../action/ChatAction');
 
-
 var MessageStore = Reflux.createStore({
   init: function() {
     this.listenTo(ChatAction.ackMessage, this._ackMessage);
-    this.listenTo(ChatAction.receiveMessage, this._receiveMessage);
     this.listenTo(ChatAction.createMessage, this._createMessage);
     this.listenTo(ChatAction.updateMessageId, this._updateMessageId);
   },
@@ -19,9 +17,11 @@ var MessageStore = Reflux.createStore({
     msgs.push(message);
 
     store.set('messages', msgs);
+    this.trigger();
   },
 
   formatCreatedMessage: function(message) {
+    var ChatStore = require('../stores/ChatStore');
     var timestamp = Date.now();
 
     return {
@@ -30,12 +30,21 @@ var MessageStore = Reflux.createStore({
       sender: 'self',
       timestamp: new Date(timestamp),
       acked: false,
+      thread: ChatStore.getCurrentId(),
       text: message
     }
   },
 
   getAll: function() {
     return store.get('messages') || [];
+  },
+
+  getAllForChat: function(chatId) {
+    var messages = store.get('messages') || [];
+
+    return messages.filter(function(msg) {
+      return msg.thread == chatId;
+    });
   },
 
   _ackMessage: function(id) {
@@ -59,11 +68,6 @@ var MessageStore = Reflux.createStore({
     this.addMessage(message);
 
     APIUtil.sendMessage(message);
-    this.trigger();
-  },
-
-  _receiveMessage: function(message) {
-    this.addMessage(message);
     this.trigger();
   },
 

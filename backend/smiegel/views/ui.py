@@ -63,7 +63,7 @@ def backdoor_recv():
     global gid
 
     gid += 1
-    msg = {'author': 'John Doe', 'timestamp': 1000 * time.time(),
+    msg = {'author': 'John Doe %s' % (gid % 4), 'timestamp': 1000 * time.time(),
            'id': gid,
            'text': "did u kno it's " + time.ctime()}
 
