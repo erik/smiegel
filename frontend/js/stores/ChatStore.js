@@ -1,7 +1,6 @@
 var store = require('../vendor/store');
 var Reflux = require('reflux');
 
-var ActionTypes = require('../constants/EventConstants').ActionTypes;
 var APIUtil = require('../util/APIUtil');
 var ChatAction = require('../action/ChatAction');
 var MessageStore = require('../stores/MessageStore');
