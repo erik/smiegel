@@ -1,7 +1,7 @@
 var store = require('../vendor/store');
 var Reflux = require('reflux');
 
-var APIUtil = require('../util/APIUtil');
+var APIUtil = require('../utils/APIUtil');
 var ChatAction = require('../actions/ChatAction');
 
 var MessageStore = Reflux.createStore({

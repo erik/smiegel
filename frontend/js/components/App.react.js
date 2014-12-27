@@ -4,7 +4,7 @@ var ChatMessageList = require('../components/ChatMessageList.react');
 var ChatInput = require('../components/ChatInput.react');
 var ChatList = require('../components/ChatList.react');
 
-var APIUtil = require('../util/APIUtil.js');
+var APIUtil = require('../utils/APIUtil.js');
 
 var App = React.createClass({
     componentWillMount: function () {

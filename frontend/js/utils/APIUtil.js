@@ -3,7 +3,7 @@ var humane = require('../vendor/humane');
 
 var ChatAction = require('../actions/ChatAction');
 var EventTypes = require('../constants/EventConstants').EventTypes;
-var CryptoUtil = require('../util/CryptoUtil');
+var CryptoUtil = require('../utils/CryptoUtil');
 
 
 module.exports = {
