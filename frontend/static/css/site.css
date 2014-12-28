@@ -1,3 +1,8 @@
+* {
+    font-family: Ubuntu, Helvetica, Arial, sans-serif;
+}
+
+
 .browserid-login {
     border: 0;
     width: 185px;
@@ -52,9 +57,12 @@ body {
     background-color: #dfdfdf !important;
 }
 
-* {
-    font-family: Ubuntu, Helvetica, Arial, sans-serif;
+.contact-list-group {
+  min-height: 250px;
+  max-height: 500px;
+  overflow-y: auto;
 }
+
 
 .message {
     width: auto;

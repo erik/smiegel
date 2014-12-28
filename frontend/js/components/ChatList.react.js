@@ -1,6 +1,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 
+var ContactList = require('../components/ContactList.react');
 var ChatStore = require('../stores/ChatStore');
 
 var ChatItem = React.createClass({
@@ -50,7 +51,9 @@ var ChatList = React.createClass({
     return (
       <div className="chat-list">
         <div className="list-group">
-          <a href="#" className="list-group-item">
+          <a onClick={this._openContactList}
+             href="#"
+             className="list-group-item">
             <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
             Start conversation
           </a>
@@ -69,6 +72,11 @@ var ChatList = React.createClass({
     return {
       chats: ChatStore.getAll()
     };
+  },
+
+  _openContactList: function() {
+    React.render(<ContactList />, document.getElementById('modal'));
+
   },
 
   _onChange: function() {

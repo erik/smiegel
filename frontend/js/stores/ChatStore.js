@@ -16,6 +16,20 @@ var ChatStore = Reflux.createStore({
     }
   },
 
+  addChat: function(id, name) {
+    var threads = store.get('threads');
+
+    if (!(id in threads)) {
+      threads[id] = {
+        'id': id,
+        'name': name,
+        'unread': 0
+      };
+
+      store.set('threads', threads);
+    }
+  },
+
   getAll: function() {
     var threads = store.get('threads');
 
@@ -41,24 +55,17 @@ var ChatStore = Reflux.createStore({
   },
 
   _receiveMessage: function(message) {
-    var threads = store.get('threads');
-
-    if (!(message.author in threads)) {
-      threads[message.author] = {
-        'id': message.author,
-        'name': message.author,
-        'unread': 0
-      };
-    }
+    this.addChat(message.author, message.author);
 
     if (message.author != _currentId) {
+      var threads = store.get('threads');
       threads[message.author].unread += 1;
+      store.set('threads', threads);
     }
 
     message.thread = message.author;
     message.acked = true;
 
-    store.set('threads', threads);
     MessageStore.addMessage(message);
 
     this.trigger();
