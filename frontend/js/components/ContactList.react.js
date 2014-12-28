@@ -79,9 +79,22 @@ var ContactList = React.createClass({
     };
   },
 
+  _selectContactOnClick: function(contact) {
+    var that = this;
+    return function() { that._selectContact(contact); };
+  },
+
+  _selectContact: function(contact) {
+    ChatStore.addChat(contact.name, contact.name);
+    ChatStore.setCurrentId(contact.name);
+
+    $('#contact-list').modal('hide');
+  },
+
   _renderContact: function(contact) {
     return (
       <a href="#"
+         onClick={this._selectContactOnClick(contact)}
          key={ contact.name + contact.number }
          className="list-group-item">
         <h4 className="list-group-item-heading"> { contact.name } </h4>
