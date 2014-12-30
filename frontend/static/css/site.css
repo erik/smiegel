@@ -19,7 +19,7 @@
 .messagewindow {
     width: 100%;
     overflow:auto;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .inputbox {
@@ -33,7 +33,7 @@
 }
 
 #chat-list {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .container {

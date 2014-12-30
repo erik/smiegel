@@ -76,7 +76,6 @@ var ChatList = React.createClass({
 
   _openContactList: function() {
     React.render(<ContactList />, document.getElementById('modal'));
-
   },
 
   _onChange: function() {
