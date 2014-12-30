@@ -26,10 +26,7 @@
     <script>
      // Make our message window the right size
      function resizeUI() {
-         var b = $(".chatwindow");
-         var p = b.position();
          var height = $(window).height();
-         height -= p.top;
 
          height -= $('.navbar').height() + 20;
          height -= $('.inputbox').height() + 20;

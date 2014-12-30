@@ -9,7 +9,7 @@ module.exports = {
   },
 
   genRandomBytes: function(length) {
-    var array = new Uint32Array(length);
+    var array = new Uint8Array(length);
     window.crypto.getRandomValues(array);
 
     return array;

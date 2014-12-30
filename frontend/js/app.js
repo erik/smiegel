@@ -1,8 +1,10 @@
-var App = require('./components/App.react.js');
 var React = require('react');
 window.React = React;
 
-React.render(
-    <App />,
-    document.getElementById('react')
-);
+var App = require('./components/App.react');
+var SetupApp = require('./components/SetupApp.react');
+var KeyStore = require('./stores/KeyStore');
+
+
+var app = KeyStore.isInitialized() ? <App /> : <SetupApp />;
+React.render(app, document.getElementById('react'));
