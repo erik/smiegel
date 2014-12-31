@@ -78,11 +78,8 @@ def sign_response(message):
 @app.route('/message/receive', methods=['POST'])
 @authentication_required
 def recv_message():
-    msgs = json.loads(request.get_json()['body'])
-
-    for msg in msgs:
-        event = util.Event('RECEIVED_MSG', msg)
-        publisher.publish(g.api_user, event)
+    event = util.Event('RECEIVED_MSG', request.get_json()['body'])
+    publisher.publish(g.api_user.id, event)
 
     print('hey it worked')
     return sign_response('hey great')

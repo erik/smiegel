@@ -71,8 +71,10 @@ module.exports = {
   },
 
   _eventRecvMsg: function(eventData) {
-    // TODO: decrypt message here
-    var msg = JSON.parse(eventData.data);
+    var encrypted = JSON.parse(eventData.data);
+    var dec = CryptoUtil.decrypt(encrypted);
+    var msg = JSON.parse(dec);
+
     // TODO: more message receive-y things
     msg.sender = msg.sender || 'other';
 

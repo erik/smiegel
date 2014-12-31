@@ -5,10 +5,10 @@ var Crypto = require('../utils/CryptoUtil');
 
 var KeyStore = Reflux.createStore({
   isInitialized: function() {
-    return false;
+    return 'shared_key' in (store.get('creds') || {});
   },
 
-  getShared: function() {
+  getToken: function() {
     // TODO: this
   },
 

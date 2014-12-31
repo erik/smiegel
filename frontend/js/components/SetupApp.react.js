@@ -79,8 +79,7 @@ var SetupApp = React.createClass({
 
     return function() {
       var array = CryptoUtil.genRandomBytes(32);
-      var encoded_str = String.fromCharCode.apply(null, array);
-      that.refs[ref].getDOMNode().value = window.btoa(encoded_str);
+      that.refs[ref].getDOMNode().value = CryptoUtil.arrayToBase64(array);
 
       that._updateQr();
     };
@@ -98,7 +97,7 @@ var SetupApp = React.createClass({
       'port': window.location.port
     });
 
-    console.log(creds);
+    store.set('creds', creds);
 
     $('#qrcode').empty();
     $('#qrcode').qrcode(JSON.stringify(creds));
