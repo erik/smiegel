@@ -79,26 +79,35 @@ var ContactList = React.createClass({
     };
   },
 
-  _selectContactOnClick: function(contact) {
+  _selectContactOnClick: function(contact, number) {
     var that = this;
-    return function() { that._selectContact(contact); };
+    return function() { that._selectContact(contact, number); };
   },
 
-  _selectContact: function(contact) {
-    ChatStore.addChat(contact.name, contact.name);
-    ChatStore.setCurrentId(contact.name);
+  _selectContact: function(contact, number) {
+    ChatStore.addChat(number, contact.name);
+    ChatStore.setCurrentId(number);
 
     $('#contact-list').modal('hide');
   },
 
   _renderContact: function(contact) {
+    var that = this;
+    var numbers = contact.numbers.map(function(n) {
+      return (
+          <p className="list-group-item-text"
+             onClick={that._selectContactOnClick(contact, n.number)}>
+            <em>{ n.type }</em> — { n.number }
+          </p>
+      );
+    });
+
     return (
       <a href="#"
-         onClick={this._selectContactOnClick(contact)}
-         key={ contact.name + contact.number }
+         key={ contact.name + contact.numbers }
          className="list-group-item">
         <h4 className="list-group-item-heading"> { contact.name } </h4>
-        <p className="list-group-item-text"> { contact.number } </p>
+        { numbers }
       </a>
     );
   },

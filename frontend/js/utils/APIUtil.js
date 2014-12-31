@@ -4,7 +4,7 @@ var humane = require('../vendor/humane');
 var ChatAction = require('../actions/ChatAction');
 var EventTypes = require('../constants/EventConstants').EventTypes;
 var CryptoUtil = require('../utils/CryptoUtil');
-
+var ContactStore = require('../stores/ContactStore');
 
 module.exports = {
   // Change this if you want to use some third party server
@@ -13,6 +13,7 @@ module.exports = {
   getEventStream: function() {
     var source = new EventSource(this.API_HOST + "/stream");
 
+    source.addEventListener(EventTypes.CONTACTS, this._eventRecvContacts);
     source.addEventListener(EventTypes.CREDENTIALS, this._eventRecvCreds);
     source.addEventListener(EventTypes.RECEIVED_MSG, this._eventRecvMsg);
     source.addEventListener(EventTypes.ACKED_MSG, this._eventAcked);
@@ -68,6 +69,13 @@ module.exports = {
     var msg = JSON.parse(eventData.data);
 
     ChatAction.ackMessage(msg.id);
+  },
+
+  _eventRecvContacts: function(eventData) {
+    // TODO: decrypt message here.
+    var contacts = JSON.parse(eventData.data);
+
+    ContactStore.setContacts(contacts);
   },
 
   _eventRecvMsg: function(eventData) {

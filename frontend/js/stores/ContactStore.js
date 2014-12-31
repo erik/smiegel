@@ -10,6 +10,11 @@ var ContactStore = Reflux.createStore({
     }
   },
 
+  setContacts: function(contacts) {
+    store.set('contacts', contacts)
+    this.trigger();
+  },
+
   getAll: function() {
     var contacts = store.get('contacts') || [];
     contacts.sort(function(a, b) {
@@ -32,9 +37,15 @@ var ContactStore = Reflux.createStore({
     for (var idx in contacts) {
       var contact = contacts[idx];
 
-      if ( contact.name.toLowerCase().indexOf(query) != -1
-        || contact.number.indexOf(query) != -1) {
+      if (contact.name.toLowerCase().indexOf(query) != -1) {
         matches.push(contact);
+      } else {
+        for (var idx in contact.numbers) {
+          if (contact.numbers[idx].number.indexOf(query) != -1) {
+            matches.push(contact);
+            break;
+          }
+        }
       }
     }
 

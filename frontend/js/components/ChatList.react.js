@@ -22,11 +22,17 @@ var ChatItem = React.createClass({
       unread = <span className="badge"> { chat.unread } </span>;
     }
 
+    var id = '';
+    if (chat.id != chat.name) {
+      id = <em> { chat.id } </em>;
+    }
+
     return (
       <a onClick={this.onClick}
          className={ cls }>
         { chat.name }
         { unread }
+        { id }
       </a>
     );
   }
