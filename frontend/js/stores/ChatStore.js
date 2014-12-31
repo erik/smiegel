@@ -1,7 +1,6 @@
 var store = require('../vendor/store');
 var Reflux = require('reflux');
 
-var APIUtil = require('../utils/APIUtil');
 var ChatAction = require('../actions/ChatAction');
 var MessageStore = require('../stores/MessageStore');
 
@@ -59,7 +58,7 @@ var ChatStore = Reflux.createStore({
   _receiveMessage: function(message) {
     this.addChat(message.author, message.author);
 
-    if (message.author != _currentId) {
+    if (message.author !== _currentId) {
       var threads = store.get('threads');
       threads[message.author].unread += 1;
       store.set('threads', threads);

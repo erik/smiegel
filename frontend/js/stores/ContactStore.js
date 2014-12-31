@@ -1,8 +1,6 @@
 var store = require('../vendor/store');
 var Reflux = require('reflux');
 
-var APIUtil = require('../utils/APIUtil');
-var ChatAction = require('../actions/ChatAction');
 var ContactStore = Reflux.createStore({
   init: function() {
     if (!store.get('contacts')) {
@@ -11,7 +9,7 @@ var ContactStore = Reflux.createStore({
   },
 
   setContacts: function(contacts) {
-    store.set('contacts', contacts)
+    store.set('contacts', contacts);
     this.trigger();
   },
 
@@ -27,21 +25,21 @@ var ContactStore = Reflux.createStore({
   getAllMatching: function(query) {
     query = query.toLowerCase();
 
-    if (query.trim() == '') {
+    if (query.trim() === '') {
       return this.getAll();
     }
 
     var contacts = this.getAll();
     var matches = [];
 
-    for (var idx in contacts) {
-      var contact = contacts[idx];
+    for (var i in contacts) {
+      var contact = contacts[i];
 
-      if (contact.name.toLowerCase().indexOf(query) != -1) {
+      if (contact.name.toLowerCase().indexOf(query) !== -1) {
         matches.push(contact);
       } else {
-        for (var idx in contact.numbers) {
-          if (contact.numbers[idx].number.indexOf(query) != -1) {
+        for (var j in contact.numbers) {
+          if (contact.numbers[j].number.indexOf(query) !== -1) {
             matches.push(contact);
             break;
           }

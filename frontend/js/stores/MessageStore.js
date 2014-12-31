@@ -42,7 +42,7 @@ var MessageStore = Reflux.createStore({
     var messages = store.get('messages') || [];
 
     return messages.filter(function(msg) {
-      return msg.thread == chatId;
+      return msg.thread === chatId;
     });
   },
 
@@ -50,7 +50,7 @@ var MessageStore = Reflux.createStore({
     var msgs = store.get('messages') || [];
 
     msgs = msgs.map(function(msg) {
-      if (msg.id == id) {
+      if (msg.id === id) {
         msg.acked = true;
       }
 
@@ -74,7 +74,7 @@ var MessageStore = Reflux.createStore({
     var msgs = store.get('messages') || [];
 
     msgs = msgs.map(function(msg) {
-      if (msg.id == oldId) {
+      if (msg.id === oldId) {
         msg.id = newId;
       }
 
