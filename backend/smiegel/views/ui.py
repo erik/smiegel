@@ -41,19 +41,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/credentials')
-def credentials():
-    if not g.user:
-        abort(401)
-
-    return flask.jsonify({
-        'user_id': str(g.user.id),
-        'auth_token': util.b64_encode(g.user.auth_token),
-        'email': g.user.login_email,
-        'server': 'http://%s/api/' % flask.current_app.config['SERVER_NAME']
-    })
-
-
 gid = 0
 
 
@@ -87,10 +74,17 @@ def event_stream():
         abort(401)
 
     uid = g.user.id
+    q = queue.Queue()
+
+    # Push credential information first
+    q.put(util.Event('CREDENTIALS', json.dumps({
+        'user_id': str(uid),
+        'auth_token': util.b64_encode(g.user.auth_token),
+        'email': g.user.login_email
+    })))
 
     def sse_stream():
         try:
-            q = queue.Queue()
             publisher.subscribe(uid, q)
 
             while True:

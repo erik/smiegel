@@ -11,17 +11,18 @@ module.exports = {
   API_HOST: '',
 
   getEventStream: function() {
-    var eventSource = new EventSource(this.API_HOST + "/stream");
+    var source = new EventSource(this.API_HOST + "/stream");
 
-    eventSource.addEventListener(EventTypes.RECEIVED_MSG, this._eventRecvMsg);
-    eventSource.addEventListener(EventTypes.ACKED_MSG, this._eventAcked);
+    source.addEventListener(EventTypes.CREDENTIALS, this._eventRecvCreds);
+    source.addEventListener(EventTypes.RECEIVED_MSG, this._eventRecvMsg);
+    source.addEventListener(EventTypes.ACKED_MSG, this._eventAcked);
 
-    eventSource.onerror = function(e) {
+    source.onerror = function(e) {
       console.log(e);
       humane.log("Failed to reach server!");
     };
 
-    return eventSource;
+    return source;
   },
 
   sendMessage: function(message) {
@@ -46,15 +47,6 @@ module.exports = {
     };
 
     return msg;
-  },
-
-  _getCredentials: function() {
-    // TODO: write this for real.
-    return {
-      user_id: 1,
-      shared_key: null,
-      secret_key: null
-    };
   },
 
   _postData: function(endpoint, body, cb) {
@@ -85,5 +77,15 @@ module.exports = {
     msg.sender = msg.sender || 'other';
 
     ChatAction.receiveMessage(msg);
+  },
+
+  _eventRecvCreds: function(eventData) {
+    var creds = JSON.parse(eventData.data);
+    humane.log('Received credentials for ' + creds.email);
+
+    var storedCreds = store.get('creds') || {};
+    $.extend(storedCreds, creds);
+
+    store.set('creds', storedCreds);
   }
 };
