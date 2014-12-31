@@ -6,6 +6,7 @@ class User(db.Model):
     id          = db.Column(db.Integer, primary_key=True)
     auth_token  = db.Column(db.String(32), unique=True)
     login_email = db.Column(db.String(256), unique=True)
+    contacts    = db.Column(db.Text)
     messages    = db.relationship('Message', backref='user', lazy='dynamic')
 
     def __init__(self, login_email, auth_token=None):

@@ -84,6 +84,9 @@ def event_stream():
         'email': g.user.login_email
     })))
 
+    # Push contacts list
+    q.put(util.Event('CONTACTS', g.user.contacts or {}))
+
     def sse_stream():
         try:
             publisher.subscribe(uid, q)
