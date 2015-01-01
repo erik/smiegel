@@ -29,7 +29,7 @@ module.exports = {
   sendMessage: function(message) {
     this._postData(
       '/api/message/send',
-      this.formatRequest(1, message),
+      this.formatRequest(1, JSON.stringify(message)),
       function(response) {
         var js = JSON.parse(response);
         ChatAction.updateMessageId(message.id, js.id);
@@ -38,11 +38,13 @@ module.exports = {
   },
 
   formatRequest: function(user_id, body) {
-    var signature = CryptoUtil.sign(body);
-    var encrypted = CryptoUtil.encrypt(body);
+    var encrypted = JSON.stringify(CryptoUtil.encrypt(body));
+    var signature = CryptoUtil.sign(encrypted);
+
+    var creds  = store.get('creds') || {};
 
     var msg = {
-      'user_id': this._getCredentials().user_id,
+      'user_id': creds.user_id,
       'body': encrypted,
       'signature': signature
     };

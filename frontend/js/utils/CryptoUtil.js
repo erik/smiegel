@@ -31,7 +31,13 @@ module.exports = {
   },
 
   sign: function(message) {
-    return 'TODO: implement sign';
+    var creds = store.get('creds') || {};
+    var hmac = forge.hmac.create();
+
+    hmac.start('sha256', window.atob(creds.auth_token));
+    hmac.update(message);
+
+    return window.btoa(hmac.digest().data);
   },
 
   encrypt: function(message) {
@@ -66,10 +72,10 @@ module.exports = {
     cipher.update(forge.util.createBuffer(msgBytes));
     cipher.finish();
 
-    var encrypted = cipher.output;
-    var tag = cipher.mode.tag;
+    var encrypted = cipher.output.getBytes();
+    var tag = cipher.mode.tag.getBytes();
 
-    return [iv, tag, encrypted];
+    return [this.arrayToBase64(iv), tag, encrypted];
   },
 
   _decrypt: function(key, iv, tag, cipher) {
