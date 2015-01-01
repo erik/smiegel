@@ -41,34 +41,6 @@ def index():
     return render_template('index.html')
 
 
-gid = 0
-
-
-@app.route('/backdoor/recv')
-def backdoor_recv():
-    import time
-    global gid
-
-    gid += 1
-    msg = {'author': 'John Doe %s' % (gid % 4),
-           'timestamp': 1000 * time.time(),
-           'id': gid,
-           'text': "did u kno it's " + time.ctime()}
-
-    event = util.Event('RECEIVED_MSG', json.dumps(msg))
-    publisher.publish(1, event)
-
-    return flask.Response('okay, sent\n')
-
-
-@app.route('/backdoor/ack/<msgId>')
-def backdoor_ack(msgId):
-    event = util.Event('ACKED_MSG', '{"id": "%s"}' % msgId)
-    publisher.publish(1, event)
-
-    return flask.Response("okay, ACK'd\n")
-
-
 @app.route('/stream', methods=['GET'])
 def event_stream():
     if not g.user:
