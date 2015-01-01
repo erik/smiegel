@@ -78,13 +78,15 @@ def sign_response(message):
 @app.route('/contacts', methods=['POST'])
 @authentication_required
 def contacts():
-    g.api_user.contacts = request.get_json()['body']
+    contacts = request.get_json()['body']
+
+    g.api_user.contacts = contacts
     db.session.commit()
 
-    event = util.Event('CONTACTS', g.api_user.contacts)
+    event = util.Event('CONTACTS', contacts)
     publisher.publish(g.api_user.id, event)
 
-    return sign_response('n1')
+    return sign_response('sent')
 
 
 @app.route('/message/receive', methods=['POST'])

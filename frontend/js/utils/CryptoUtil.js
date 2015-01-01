@@ -1,5 +1,6 @@
 var store = require('../vendor/store');
 var forge = require('../vendor/forge').forge;
+var humane = require('../vendor/humane');
 
 module.exports = {
   initCrypto: function() {
@@ -34,8 +35,11 @@ module.exports = {
   },
 
   encrypt: function(message) {
-    // TODO: implement encryption
-    return JSON.stringify(message);
+    var creds = store.get('creds') || {};
+    var key = window.atob(creds.shared_key);
+
+    var result = this._encrypt(key, message);
+    return result.map(window.btoa);
   },
 
   decrypt: function(enc) {
@@ -65,7 +69,7 @@ module.exports = {
     var encrypted = cipher.output;
     var tag = cipher.mode.tag;
 
-    // TODO: this
+    return [iv, tag, encrypted];
   },
 
   _decrypt: function(key, iv, tag, cipher) {
@@ -82,6 +86,7 @@ module.exports = {
       return decipher.output;
     }
 
+    humane.log('Decryption failed! Did your key change?');
     return null;
   }
 };

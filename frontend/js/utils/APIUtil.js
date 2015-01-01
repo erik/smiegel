@@ -72,16 +72,29 @@ module.exports = {
   },
 
   _eventRecvContacts: function(eventData) {
-    // TODO: decrypt message here.
-    var contacts = JSON.parse(eventData.data);
+    var encrypted = JSON.parse(eventData.data);
+    var decrypted = CryptoUtil.decrypt(encrypted);
 
-    ContactStore.setContacts(contacts);
+    if (decrypted === null) {
+      humane.log('Failed to decrypt contact list...');
+      return;
+    }
+
+    humane.log('Received most recent contacts list');
+
+    ContactStore.setContacts(JSON.parse(decrypted));
   },
 
   _eventRecvMsg: function(eventData) {
     var encrypted = JSON.parse(eventData.data);
-    var dec = CryptoUtil.decrypt(encrypted);
-    var msg = JSON.parse(dec);
+    var decrypted = CryptoUtil.decrypt(encrypted);
+
+    if (decrypted === null) {
+      humane.log('Failed to decrypt message received...');
+      return;
+    }
+
+    var msg = JSON.parse(decrypted);
 
     // TODO: more message receive-y things
     msg.sender = msg.sender || 'other';
