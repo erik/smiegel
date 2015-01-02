@@ -2,6 +2,7 @@ var React = require('react');
 
 var Settings = require('../components/Settings.react');
 
+
 var Navbar = React.createClass({
   _openSettingsPane: function() {
     React.render(<Settings />, document.getElementById('modal'));

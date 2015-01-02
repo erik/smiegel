@@ -1,7 +1,8 @@
-var forge = require('../vendor/forge').forge;
+var forge  = require('../vendor/forge').forge;
 var humane = require('../vendor/humane');
 
 var KeyStore = require('../stores/KeyStore');
+
 
 module.exports = {
   genRandomBytes: function(length) {

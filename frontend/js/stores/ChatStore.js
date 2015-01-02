@@ -1,10 +1,12 @@
-var store = require('../vendor/store');
 var Reflux = require('reflux');
 
 var ChatAction = require('../actions/ChatAction');
 var MessageStore = require('../stores/MessageStore');
 
+var store = require('../vendor/store');
+
 var _currentId = null;
+
 
 var ChatStore = Reflux.createStore({
   init: function() {

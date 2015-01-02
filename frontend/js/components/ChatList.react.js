@@ -1,8 +1,10 @@
-var React = require('react');
+var React  = require('react');
 var Reflux = require('reflux');
 
 var ContactList = require('../components/ContactList.react');
+
 var ChatStore = require('../stores/ChatStore');
+
 
 var ChatItem = React.createClass({
   onClick: function() {

@@ -1,15 +1,15 @@
 var React = require('react');
 
+var ChatInput       = require('../components/ChatInput.react');
 var ChatMessageList = require('../components/ChatMessageList.react');
-var ChatInput = require('../components/ChatInput.react');
 
+var ChatStore    = require('../stores/ChatStore.js');
 var ContactStore = require('../stores/ContactStore.js');
-var ChatStore = require('../stores/ChatStore.js');
 
 var APIUtil = require('../utils/APIUtil.js');
 
-var ContactList = React.createClass({
 
+var ContactList = React.createClass({
   getInitialState: function() {
     return this._getStateFromStores();
   },

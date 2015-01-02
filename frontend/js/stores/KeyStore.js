@@ -1,7 +1,8 @@
 var Reflux = require('reflux');
 
-var store = require('../vendor/store');
 var Crypto = require('../utils/CryptoUtil');
+var store = require('../vendor/store');
+
 
 var KeyStore = Reflux.createStore({
   isInitialized: function() {

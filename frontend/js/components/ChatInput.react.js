@@ -1,8 +1,10 @@
-var React = require('react');
+var React  = require('react');
 var Reflux = require('reflux');
 
 var ChatAction = require('../actions/ChatAction');
+
 var ChatStore = require('../stores/ChatStore');
+
 
 var ChatInput = React.createClass({
   mixins: [Reflux.ListenerMixin],

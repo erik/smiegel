@@ -1,10 +1,11 @@
-var React = require('react');
+var React  = require('react');
 var Reflux = require('reflux');
 
-var CryptoUtil = require('../utils/CryptoUtil');
-var APIUtil = require('../utils/APIUtil');
-
 var KeyStore = require('../stores/KeyStore');
+
+var APIUtil    = require('../utils/APIUtil');
+var CryptoUtil = require('../utils/CryptoUtil');
+
 
 var SetupApp = React.createClass({
   mixins: [Reflux.ListenerMixin],

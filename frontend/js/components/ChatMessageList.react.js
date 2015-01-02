@@ -1,9 +1,11 @@
-var React = require('react');
+var React  = require('react');
 var Reflux = require('reflux');
 
 var ChatMessage = require ('../components/ChatMessage.react');
+
+var ChatStore    = require('../stores/ChatStore');
 var MessageStore = require('../stores/MessageStore');
-var ChatStore = require('../stores/ChatStore');
+
 
 var ChatMessageList = React.createClass({
     mixins: [Reflux.ListenerMixin],

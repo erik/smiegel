@@ -1,5 +1,6 @@
-var store = require('../vendor/store');
 var Reflux = require('reflux');
+var store = require('../vendor/store');
+
 
 var ContactStore = Reflux.createStore({
   init: function() {

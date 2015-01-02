@@ -1,5 +1,6 @@
 var React = require('react');
 
+
 var ChatMessage = React.createClass({
   render: function() {
     var message = this.props.message;

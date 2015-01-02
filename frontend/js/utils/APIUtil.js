@@ -3,10 +3,11 @@ var humane = require('../vendor/humane');
 var ChatAction = require('../actions/ChatAction');
 var EventTypes = require('../constants/EventConstants').EventTypes;
 
+var ContactStore = require('../stores/ContactStore');
+var KeyStore     = require('../stores/KeyStore');
+
 var CryptoUtil = require('../utils/CryptoUtil');
 
-var ContactStore = require('../stores/ContactStore');
-var KeyStore = require('../stores/KeyStore');
 
 module.exports = {
   // Change this if you want to use some third party server
