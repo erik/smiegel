@@ -4,6 +4,8 @@ var ChatMessageList = require('../components/ChatMessageList.react');
 var ChatInput = require('../components/ChatInput.react');
 var ChatList = require('../components/ChatList.react');
 
+var KeyStore = require('../stores/KeyStore');
+
 var Settings = React.createClass({
   componentDidMount: function () {
     var that = this;
@@ -12,6 +14,15 @@ var Settings = React.createClass({
     $('#settings').on('hidden.bs.modal', function () {
       that._onClose();
     });
+
+    var creds = KeyStore.getCredentials();
+    $.extend(creds, {
+      'server': window.location.origin
+    });
+
+    $('#qrcode').empty();
+    $('#qrcode').qrcode(JSON.stringify(creds));
+
   },
 
   render: function() {
@@ -31,6 +42,7 @@ var Settings = React.createClass({
 
             <div className="modal-body">
               <p>
+                <div id="qrcode" />
               </p>
             </div>
             <div className="modal-footer">

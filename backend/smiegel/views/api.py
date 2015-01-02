@@ -60,7 +60,6 @@ def validate_signature(json):
     if not g.api_user:
         return False
 
-    # just ignore all crypto for now
     return json['signature'] == util.authenticate(g.api_user.auth_token,
                                                   json['body'])
 

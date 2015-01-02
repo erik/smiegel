@@ -1,10 +1,12 @@
-var store = require('../vendor/store');
 var humane = require('../vendor/humane');
 
 var ChatAction = require('../actions/ChatAction');
 var EventTypes = require('../constants/EventConstants').EventTypes;
+
 var CryptoUtil = require('../utils/CryptoUtil');
+
 var ContactStore = require('../stores/ContactStore');
+var KeyStore = require('../stores/KeyStore');
 
 module.exports = {
   // Change this if you want to use some third party server
@@ -41,10 +43,8 @@ module.exports = {
     var encrypted = JSON.stringify(CryptoUtil.encrypt(body));
     var signature = CryptoUtil.sign(encrypted);
 
-    var creds  = store.get('creds') || {};
-
     var msg = {
-      'user_id': creds.user_id,
+      'user_id': KeyStore.getUserId(),
       'body': encrypted,
       'signature': signature
     };
@@ -108,9 +108,8 @@ module.exports = {
     var creds = JSON.parse(eventData.data);
     humane.log('Received credentials for ' + creds.email);
 
-    var storedCreds = store.get('creds') || {};
+    var storedCreds = KeyStore.getCredentials();
     $.extend(storedCreds, creds);
-
-    store.set('creds', storedCreds);
+    KeyStore.setCredentials(storedCreds);
   }
 };

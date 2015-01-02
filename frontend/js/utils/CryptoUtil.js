@@ -1,12 +1,9 @@
-var store = require('../vendor/store');
 var forge = require('../vendor/forge').forge;
 var humane = require('../vendor/humane');
 
-module.exports = {
-  initCrypto: function() {
-    // TODO: read from localstorage
-  },
+var KeyStore = require('../stores/KeyStore');
 
+module.exports = {
   genRandomBytes: function(length) {
     var array = new Uint8Array(length);
     window.crypto.getRandomValues(array);
@@ -31,31 +28,25 @@ module.exports = {
   },
 
   sign: function(message) {
-    var creds = store.get('creds') || {};
     var hmac = forge.hmac.create();
 
-    hmac.start('sha256', window.atob(creds.auth_token));
+    hmac.start('sha256', KeyStore.getToken());
     hmac.update(message);
 
     return window.btoa(hmac.digest().data);
   },
 
   encrypt: function(message) {
-    var creds = store.get('creds') || {};
-    var key = window.atob(creds.shared_key);
-
-    var result = this._encrypt(key, message);
+    var result = this._encrypt(KeyStore.getSecret(), message);
     return result.map(window.btoa);
   },
 
   decrypt: function(enc) {
-    var creds = store.get('creds') || {};
-
     var iv = window.atob(enc[0]);
     var tag = window.atob(enc[1]);
     var cipher = window.atob(enc[2]);
 
-    var key_bytes = window.atob(creds.shared_key);
+    var key_bytes = KeyStore.getSecret();
 
     return this._decrypt(key_bytes, iv, tag, cipher);
   },

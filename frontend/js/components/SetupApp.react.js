@@ -1,16 +1,17 @@
 var React = require('react');
-var store = require('../vendor/store');
+var Reflux = require('reflux');
+
 var CryptoUtil = require('../utils/CryptoUtil');
 var APIUtil = require('../utils/APIUtil');
 
+var KeyStore = require('../stores/KeyStore');
 
 var SetupApp = React.createClass({
+  mixins: [Reflux.ListenerMixin],
+
   componentWillMount: function () {
     this._listen();
-
-    $.getScript("https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js")
-     .done(this._updateQr);
-
+    this.listenTo(KeyStore, this._updateQr);
   },
 
   componentDidMount: function() {
@@ -78,26 +79,23 @@ var SetupApp = React.createClass({
     var that = this;
 
     return function() {
-      var array = CryptoUtil.genRandomBytes(32);
-      that.refs[ref].getDOMNode().value = CryptoUtil.arrayToBase64(array);
+      var key = CryptoUtil.genRandomBytes(32);
+      var key_b64 = CryptoUtil.arrayToBase64(key);
 
-      that._updateQr();
+      that.refs[ref].getDOMNode().value = key_b64;
+
+      var creds = KeyStore.getCredentials();
+
+      KeyStore.setCredentials({ shared_key: key_b64 });
     };
   },
 
   _updateQr: function() {
-    // Make sure we're not too quick.
-    if ($('#qrcode').qrcode === undefined) return;
+    var creds = KeyStore.getCredentials();
 
-    var creds = store.get('creds') || {};
     $.extend(creds, {
-      'shared_key': this.refs.secret_key.getDOMNode().value,
-      'server': window.location.origin,
-      'host': window.location.hostname,
-      'port': window.location.port
+      'server': window.location.origin
     });
-
-    store.set('creds', creds);
 
     $('#qrcode').empty();
     $('#qrcode').qrcode(JSON.stringify(creds));
