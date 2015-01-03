@@ -130,3 +130,17 @@ def ack_message():
     publisher.publish(g.api_user, util.Event('ACKED_MSG', msg.id))
 
     return sign_response('cool dude')
+
+
+@app.route('/ping', methods=['POST'])
+def ping():
+    json = request.get_json(silent=True)
+
+    if not json:
+        # TODO: better response
+        abort(400)
+
+    if not validate_signature(json):
+        return sign_response('bad signature')
+
+    return sign_response(json['body'])
