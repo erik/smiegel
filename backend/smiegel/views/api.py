@@ -1,4 +1,5 @@
 import flask
+import hmac
 import json
 
 from flask import abort, g, request
@@ -60,8 +61,11 @@ def validate_signature(json):
     if not g.api_user:
         return False
 
-    return json['signature'] == util.authenticate(g.api_user.auth_token,
-                                                  json['body'])
+    client_sig = json['signature']
+    expected_sig = util.authenticate(g.api_user.auth_token, json['body'])
+
+    # Prevent timing attacks
+    return hmac.compare_digest(client_sig, expected_sig)
 
 
 def sign_response(message):

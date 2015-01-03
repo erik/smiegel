@@ -1,6 +1,5 @@
 var Reflux = require('reflux');
 
-var Crypto = require('../utils/CryptoUtil');
 var store = require('../vendor/store');
 
 
